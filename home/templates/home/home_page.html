@@ -1,21 +1,427 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static wagtailcore_tags wagtailimages_tags %}
 
 {% block body_class %}template-homepage{% endblock %}
 
-{% block extra_css %}
-
-{% comment %}
-Delete the line below if you're just getting started and want to remove the welcome screen!
-{% endcomment %}
-<link rel="stylesheet" href="{% static 'css/welcome_page.css' %}">
-{% endblock extra_css %}
-
 {% block content %}
 
-{% comment %}
-Delete the line below if you're just getting started and want to remove the welcome screen!
-{% endcomment %}
-{% include 'home/welcome_page.html' %}
+{# 1. HERO CAROUSEL SECTION #}
+<section class="relative h-[90vh] w-full overflow-hidden">
+    <div class="swiper heroSwiper h-full w-full">
+        <div class="swiper-wrapper">
+            
+            <!-- Slide 1: Main Mission -->
+            <div class="swiper-slide relative flex items-center justify-center">
+                {# Background Image - CMS Editable #}
+                {% if page.hero_image %}
+                    {% image page.hero_image fill-1920x1080 as hero_img %}
+                    <img src="{{ hero_img.url }}" class="absolute inset-0 w-full h-full object-cover" alt="Hero">
+                {% else %}
+                    <img src="{% static 'images/welcome-image.jpg' %}" class="absolute inset-0 w-full h-full object-cover" alt="Agriculture">
+                {% endif %}
+                <div class="absolute inset-0 bg-gradient-to-b from-navdark/90 via-navdark/60 to-navdark/90"></div>
+                
+                <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
+                    <div class="mb-6 flex justify-center">
+                        <div class="bg-white/10 backdrop-blur-md rounded-full p-4 border border-white/20 shadow-2xl animate-float">
+                            <img src="{% static 'images/RAISE-Logo.png' %}" alt="AANR Logo" class="h-16 w-16 md:h-20 md:w-20">
+                        </div>
+                    </div>
+
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-helvetica font-bold text-white mb-4 leading-tight">
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent via-white to-accent">
+                            Raise Western Mindanao
+                        </span>
+                    </h1>
+
+                    <div class="space-y-6 max-w-4xl mx-auto">
+                        <p class="text-xl md:text-2xl text-white font-medium leading-relaxed">
+                            Empowering agricultural communities through innovation, sustainability, and knowledge sharing.
+                        </p>
+                        <p class="text-base md:text-lg text-gray-300 leading-relaxed italic">
+                            A multi-institutional program advancing technology transfer, business incubation, and knowledge sharing across Western Mindanao's AANR sector.
+                        </p>
+                    </div>
+
+                    <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <a href="#projects" class="group relative inline-flex items-center justify-center px-10 py-4 text-lg font-bold text-white bg-gradient-to-r from-secondary to-yellow-600 rounded-full shadow-xl hover:shadow-secondary/50 transition-all duration-300 hover:scale-105">
+                            Explore Projects
+                            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </a>
+                        <a href="/about/" class="px-10 py-4 text-lg font-bold text-white border-2 border-white/30 rounded-full hover:bg-white/10 transition-all backdrop-blur-sm">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Technology Transfer -->
+            <div class="swiper-slide relative flex items-center justify-center">
+                <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?q=80&w=2070" class="absolute inset-0 w-full h-full object-cover" alt="Technology">
+                <div class="absolute inset-0 bg-navdark/80"></div>
+                <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
+                    <h1 class="text-5xl md:text-7xl font-helvetica font-bold text-white mb-6">Innovation & Transfer</h1>
+                    <p class="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+                        We bridge the gap between advanced research and local implementation, ensuring that every technological breakthrough reaches the hands of our farmers.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="swiper-button-next !text-white after:!text-2xl hover:scale-125 transition-transform hidden md:flex"></div>
+        <div class="swiper-button-prev !text-white after:!text-2xl hover:scale-125 transition-transform hidden md:flex"></div>
+        <div class="swiper-pagination"></div>
+    </div>
+    
+    <div class="absolute bottom-0 left-0 right-0 z-20">
+        <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
+            <path d="M0 80L60 75C120 70 240 60 360 55C480 50 600 50 720 52.5C840 55 960 60 1080 62.5C1200 65 1320 65 1380 65L1440 65V80H1380C1320 80 1200 80 1080 80C960 80 840 80 720 80C600 80 480 80 360 80C240 80 120 80 60 80H0Z" fill="#f0fdf4"/>
+        </svg>
+    </div>
+</section>
+
+{# 2. STATS SECTION - CMS Editable #}
+<section id="about" class="py-12 bg-surface relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {# Card 1 #}
+            <div class="group relative bg-depth-primary-50 p-8 rounded-2xl shadow-depth-md hover:shadow-depth-xl transition-all duration-300 border border-depth-primary-100 hover:-translate-y-1">
+                <div class="absolute inset-0 rounded-2xl shadow-inset-sm pointer-events-none"></div>
+                <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-depth-primary-200 to-transparent opacity-60"></div>
+                <div class="relative z-10">
+                    <div class="text-5xl font-bold text-depth-primary-600 mb-2 font-helvetica"><span class="counter" data-target="{{ page.stat1_number }}">0</span>+</div>
+                    <div class="text-lg font-bold text-depth-primary-900">{{ page.stat1_label }}</div>
+                    <div class="text-sm text-depth-primary-700">{{ page.stat1_description }}</div>
+                </div>
+            </div>
+            
+            {# Card 2 #}
+            <div class="group relative bg-depth-secondary-50 p-8 rounded-2xl shadow-depth-md hover:shadow-depth-xl transition-all duration-300 border border-depth-secondary-100 hover:-translate-y-1">
+                <div class="absolute inset-0 rounded-2xl shadow-inset-sm pointer-events-none"></div>
+                <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-depth-secondary-200 to-transparent opacity-60"></div>
+                <div class="relative z-10">
+                    <div class="text-5xl font-bold text-depth-secondary-600 mb-2 font-helvetica"><span class="counter" data-target="{{ page.stat2_number }}">0</span>+</div>
+                    <div class="text-lg font-bold text-depth-secondary-900">{{ page.stat2_label }}</div>
+                    <div class="text-sm text-depth-secondary-700">{{ page.stat2_description }}</div>
+                </div>
+            </div>
+            
+            {# Card 3 #}
+            <div class="group relative bg-depth-primary-100 p-8 rounded-2xl shadow-depth-md hover:shadow-depth-xl transition-all duration-300 border border-depth-primary-200 hover:-translate-y-1">
+                <div class="absolute inset-0 rounded-2xl shadow-inset-sm pointer-events-none"></div>
+                <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-depth-primary-300 to-transparent opacity-60"></div>
+                <div class="relative z-10">
+                    <div class="text-5xl font-bold text-depth-primary-500 mb-2 font-helvetica"><span class="counter" data-target="{{ page.stat3_number }}">0</span>+</div>
+                    <div class="text-lg font-bold text-depth-primary-900">{{ page.stat3_label }}</div>
+                    <div class="text-sm text-depth-primary-700">{{ page.stat3_description }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# 3. THE 4 FLAGSHIP PROJECTS #}
+<section id="projects" class="py-16 bg-white relative">
+    <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#064e3b 1px, transparent 1px); background-size: 30px 30px;"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-12">
+            <div class="inline-block px-6 py-2 bg-surface text-primary rounded-full mb-4 border border-primary/20">
+                <span class="font-bold text-sm uppercase tracking-wider">Our Focus Areas</span>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-helvetica font-bold text-navdark">Flagship Projects</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {# Project 1 - JHCSC-IPTBM #}
+            <a href="{% if flagship_projects.jhcsc_iptbm %}{% pageurl flagship_projects.jhcsc_iptbm %}{% else %}#{% endif %}" class="group relative bg-white rounded-2xl overflow-hidden shadow-depth-lg hover:shadow-depth-2xl border border-depth-primary-100 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
+                <div class="absolute inset-0 bg-gradient-to-br from-depth-primary-50 to-depth-primary-100 rounded-2xl transform translate-y-1 translate-x-1 opacity-30 group-hover:translate-y-2 group-hover:translate-x-2 transition-all duration-500"></div>
+                <div class="relative z-10">
+                    <div class="h-40 bg-gradient-to-br from-primary to-navdark flex items-center justify-center relative overflow-hidden">
+                        <svg class="w-16 h-16 text-white/20 absolute transform group-hover:scale-150 transition-transform duration-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        <span class="text-4xl relative z-10">💡</span>
+                    </div>
+                    <div class="p-6 flex-grow flex-col bg-gradient-to-br from-white via-depth-primary-50/30 to-white">
+                        <div class="relative z-10">
+                            <h3 class="font-bold text-lg text-depth-primary-900 mb-3">JHCSC-IPTBM</h3>
+                            <p class="text-depth-primary-700 text-sm mb-4 flex-grow">To implement Intellectual Property and Technology Business Management (IP-TBM) program of the institution in order to enhance their technology management capabilities.</p>
+                            <span class="text-depth-primary-600 font-bold text-sm group-hover:text-primary transition-colors flex items-center">View Details <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            {# Project 2 - RAISE - KM #}
+            <a href="{% if flagship_projects.raise_km %}{% pageurl flagship_projects.raise_km %}{% else %}#{% endif %}" class="group relative bg-white rounded-2xl overflow-hidden shadow-depth-lg hover:shadow-depth-2xl border border-depth-secondary-100 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
+                <div class="absolute inset-0 bg-gradient-to-br from-depth-secondary-50 to-depth-secondary-100 rounded-2xl transform translate-y-1 translate-x-1 opacity-30 group-hover:translate-y-2 group-hover:translate-x-2 transition-all duration-500"></div>
+                <div class="relative z-10">
+                    <div class="h-40 bg-gradient-to-br from-secondary to-yellow-600 flex items-center justify-center relative overflow-hidden">
+                        <svg class="w-16 h-16 text-white/20 absolute transform group-hover:scale-150 transition-transform duration-500" fill="currentColor" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        <span class="text-4xl relative z-10">📊</span>
+                    </div>
+                    <div class="p-6 flex-grow flex-col bg-gradient-to-br from-white via-depth-secondary-50/30 to-white">
+                        <div class="relative z-10">
+                            <h3 class="font-bold text-lg text-depth-secondary-900 mb-3">RAISE - KM</h3>
+                            <p class="text-depth-secondary-700 text-sm mb-4 flex-grow">To enhance the knowledge management services of selected CMIs and facilitate the improvement of the Inventory of Knowledge Resources.</p>
+                            <span class="text-depth-secondary-600 font-bold text-sm group-hover:text-secondary transition-colors flex items-center">View Details <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            {# Project 3 - RAISE Regional IPTBM #}
+            <a href="{% if flagship_projects.regional_iptbm %}{% pageurl flagship_projects.regional_iptbm %}{% else %}#{% endif %}" class="group relative bg-white rounded-2xl overflow-hidden shadow-depth-lg hover:shadow-depth-2xl border border-depth-primary-200 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
+                <div class="absolute inset-0 bg-gradient-to-br from-depth-primary-100 to-depth-primary-200 rounded-2xl transform translate-y-1 translate-x-1 opacity-30 group-hover:translate-y-2 group-hover:translate-x-2 transition-all duration-500"></div>
+                <div class="relative z-10">
+                    <div class="h-40 bg-gradient-to-br from-accent to-primary flex items-center justify-center relative overflow-hidden">
+                        <svg class="w-16 h-16 text-white/20 absolute transform group-hover:scale-150 transition-transform duration-500" fill="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        <span class="text-4xl relative z-10">🌱</span>
+                    </div>
+                    <div class="p-6 flex-grow flex-col bg-gradient-to-br from-white via-depth-primary-100/30 to-white">
+                        <div class="relative z-10">
+                            <h3 class="font-bold text-lg text-depth-primary-900 mb-3 leading-tight">RAISE Regional IPTBM</h3>
+                            <p class="text-depth-primary-700 text-sm mb-4 flex-grow">To establish the Regional IPTBM in Western Mindanao to intensify the technology commercialization activities of participating CMIs.</p>
+                            <span class="text-depth-primary-500 font-bold text-sm group-hover:text-accent transition-colors flex items-center">View Details <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            {# Project 4 - ZSCMST-IPTBM #}
+            <a href="{% if flagship_projects.zscmst_iptbm %}{% pageurl flagship_projects.zscmst_iptbm %}{% else %}#{% endif %}" class="group relative bg-white rounded-2xl overflow-hidden shadow-depth-lg hover:shadow-depth-2xl border border-depth-neutral-200 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
+                <div class="absolute inset-0 bg-gradient-to-br from-depth-neutral-50 to-depth-neutral-100 rounded-2xl transform translate-y-1 translate-x-1 opacity-30 group-hover:translate-y-2 group-hover:translate-x-2 transition-all duration-500"></div>
+                <div class="relative z-10">
+                    <div class="h-40 bg-gradient-to-br from-navdark to-gray-800 flex items-center justify-center relative overflow-hidden">
+                        <svg class="w-16 h-16 text-white/20 absolute transform group-hover:scale-150 transition-transform duration-500" fill="currentColor" viewBox="0 0 24 24"><path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        <span class="text-4xl relative z-10">🤝</span>
+                    </div>
+                    <div class="p-6 flex-grow flex-col bg-gradient-to-br from-white via-depth-neutral-50/30 to-white">
+                        <div class="relative z-10">
+                            <h3 class="font-bold text-lg text-depth-neutral-900 mb-3">ZSCMST-IPTBM</h3>
+                            <p class="text-depth-neutral-700 text-sm mb-4 flex-grow">To strengthen the capacities of Intellectual Property and Technology Business Management (IPTBM) operations of the Zamboanga State College of Marine Sciences and Technology.</p>
+                            <span class="text-depth-neutral-600 font-bold text-sm group-hover:text-primary transition-colors flex items-center">View Details <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+{# 4. VLOG / MEDIA SECTION #}
+<section class="py-16 bg-surface">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-10 border-b border-primary/10 pb-4">
+            <div>
+                <span class="text-secondary font-bold text-sm uppercase tracking-wider">Watch & Learn</span>
+                <h2 class="text-3xl md:text-4xl font-helvetica font-bold text-navdark mt-2">AANR Vlogs & Tutorials</h2>
+            </div>
+            <a href="/vlogs/" class="hidden md:inline-flex items-center text-primary font-bold hover:text-secondary transition-colors mt-4 md:mt-0">
+                View All Videos
+                <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+            </a>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="group relative rounded-2xl overflow-hidden cursor-pointer shadow-lg bg-navdark">
+                <img src="{% static 'images/smart-farming.jpg' %}" class="w-full h-60 object-cover opacity-70 group-hover:opacity-40 transition-opacity duration-300" alt="Smart Farming">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border-2 border-white/50 group-hover:scale-110 group-hover:bg-secondary/80 group-hover:border-secondary transition-all duration-300 shadow-xl">
+                        <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-navdark via-navdark/80 to-transparent transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                    <span class="px-2 py-1 bg-primary text-white text-xs font-bold rounded mb-2 inline-block">Episode 1</span>
+                    <p class="text-white font-bold text-lg leading-tight">Smart Farming Techniques</p>
+                </div>
+            </div>
+
+            <div class="group relative rounded-2xl overflow-hidden cursor-pointer shadow-lg bg-navdark">
+                <img src="{% static 'images/aqua-business.jpg' %}" class="w-full h-60 object-cover opacity-70 group-hover:opacity-40 transition-opacity duration-300" alt="Aqua-Business">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border-2 border-white/50 group-hover:scale-110 group-hover:bg-secondary/80 group-hover:border-secondary transition-all duration-300 shadow-xl">
+                        <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-navdark via-navdark/80 to-transparent transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                    <span class="px-2 py-1 bg-secondary text-white text-xs font-bold rounded mb-2 inline-block">Episode 2</span>
+                    <p class="text-white font-bold text-lg leading-tight">Aqua-Business Success Stories</p>
+                </div>
+            </div>
+
+            <div class="group relative rounded-2xl overflow-hidden cursor-pointer shadow-lg bg-navdark">
+                <img src="https://images.unsplash.com/photo-1589923188900-85dae523342b?q=80&w=2070" class="w-full h-60 object-cover opacity-70 group-hover:opacity-40 transition-opacity duration-300" alt="IP Guide">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border-2 border-white/50 group-hover:scale-110 group-hover:bg-secondary/80 group-hover:border-secondary transition-all duration-300 shadow-xl">
+                        <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-navdark via-navdark/80 to-transparent transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                    <span class="px-2 py-1 bg-accent text-white text-xs font-bold rounded mb-2 inline-block">Tutorial</span>
+                    <p class="text-white font-bold text-lg leading-tight">IP Registration Full Guide</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-8 text-center md:hidden">
+            <a href="/vlogs/" class="inline-flex items-center justify-center px-6 py-3 border-2 border-primary text-primary font-bold rounded-full w-full">View All Videos</a>
+        </div>
+    </div>
+</section>
+
+{# 5. FEATURED NEWS SECTION #}
+<section class="py-16 bg-gradient-to-br from-navdark to-primary text-white relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="mb-10 border-b border-white/20 pb-4">    
+            <span class="text-secondary font-bold text-sm uppercase tracking-wider">Latest Updates</span>
+            <h2 class="text-3xl md:text-4xl font-helvetica font-bold mb-2 mt-2">Recent Events and Activities</h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {% for event in recent_events %}
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 hover:border-secondary/50 transition-all duration-300 hover:-translate-y-1">
+                <div class="p-6">
+                    {% if event.event_date %}
+                    <span class="text-xs font-bold text-secondary mb-2 block">
+                        {% if event.event_duration %}{{ event.event_duration }}{% else %}{{ event.event_date|date:"F d, Y" }}{% endif %}
+                    </span>
+                    {% endif %}
+                    <h3 class="text-xl font-bold mb-3 text-white line-clamp-2">{{ event.title }}</h3>
+                    <p class="text-gray-300 text-sm mb-4 line-clamp-3">{{ event.intro|default:event.overview|default:"" }}</p>
+                    <a href="{% pageurl event %}" class="text-accent text-sm font-bold hover:text-white transition-colors">Read Full Article &rarr;</a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 hover:border-secondary/50 transition-all duration-300 hover:-translate-y-1">
+                <div class="p-6">
+                    <span class="text-xs font-bold text-secondary mb-2 block">November 18, 2025</span>
+                    <h3 class="text-xl font-bold mb-3 text-white">RAISE Caraga Conducts Year 2 Annual Progress Review Meeting to Consolidate Program Accomplishments.</h3>
+                    <p class="text-gray-300 text-sm mb-4 line-clamp-3">The review aimed to assess the overall progress of the RAISE Program from June to October 2025 and ensure alignment of remaining deliverables.</p>
+                    <a href="#" class="text-accent text-sm font-bold hover:text-white transition-colors">Read Full Article &rarr;</a>
+                </div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 hover:border-secondary/50 transition-all duration-300 hover:-translate-y-1">
+                <div class="p-6">
+                    <span class="text-xs font-bold text-secondary mb-2 block">November 27-28, 2025</span>
+                    <h3 class="text-xl font-bold mb-3 text-white">RAISE Caraga Conducts Phase II Proposal Writing Workshop.</h3>
+                    <p class="text-gray-300 text-sm mb-4">The two-day training aimed to enhance the region's capacity to develop high-quality, fundable project proposals aligned with DOST-PCAARRD's priorities and the program's 6Ps framework.</p>
+                    <a href="#" class="text-accent text-sm font-bold hover:text-white transition-colors">Read Full Article &rarr;</a>
+                </div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 hover:border-secondary/50 transition-all duration-300 hover:-translate-y-1">
+                <div class="p-6">
+                    <span class="text-xs font-bold text-secondary mb-2 block">December 11-13, 2025</span>
+                    <h3 class="text-xl font-bold mb-3 text-white">RAISE Caraga Conducts Year-End Activity on Ways Forward and Phase II Planning</h3>
+                    <p class="text-gray-300 text-sm mb-4">The three-day activity, held in Claveria, Misamis Oriental, was organized by RAISE Caraga and attended by the RAISE Core Staff.</p>
+                    <a href="#" class="text-accent text-sm font-bold hover:text-white transition-colors">Read Full Article &rarr;</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# 6. GOOGLE MAPS SECTION #}
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-helvetica font-bold text-navdark">Locate Us</h2>
+            <p class="text-gray-600 mt-2">Visit our main hub in Western Mindanao</p>
+        </div>
+        
+        <div class="w-full h-[350px] md:h-[450px] rounded-2xl overflow-hidden shadow-lg border-2 border-primary/10">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1011155.6738986877!2d121.78280361099182!3d7.882046467323871!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32512f483c6dd103%3A0x633d4dae0da1f6f8!2sZamboanga%20Peninsula!5e0!3m2!1sen!2sph!4v1711812345678!5m2!1sen!2sph" 
+                width="100%" 
+                height="100%" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </div>
+</section>
 
 {% endblock content %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // 1. Initialize Swiper
+        try {
+            if (typeof Swiper !== 'undefined') {
+                const swiper = new Swiper(".heroSwiper", {
+                    loop: true,
+                    effect: "fade",
+                    speed: 1000,
+                    autoplay: {
+                        delay: 6000,
+                        disableOnInteraction: false,
+                    },
+                    pagination: {
+                        el: ".swiper-pagination",
+                        clickable: true,
+                    },
+                    navigation: {
+                        nextEl: ".swiper-button-next",
+                        prevEl: ".swiper-button-prev",
+                    },
+                });
+            }
+        } catch (error) {
+            console.log('Swiper initialization failed:', error);
+        }
+
+        // 2. Animated Counter Logic
+        const counters = document.querySelectorAll('.counter');
+        
+        function animateCounter(el) {
+            const target = parseInt(el.getAttribute('data-target'));
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
+
+            function updateCounter() {
+                current += increment;
+                if (current < target) {
+                    el.textContent = Math.floor(current);
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    el.textContent = target;
+                }
+            }
+            updateCounter();
+        }
+
+        // 3. Intersection Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    if (!el.classList.contains('counted')) {
+                        el.classList.add('counted');
+                        animateCounter(el);
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+
+        counters.forEach(counter => {
+            observer.observe(counter);
+            const rect = counter.getBoundingClientRect();
+            const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+            if (isVisible && !counter.classList.contains('counted')) {
+                counter.classList.add('counted');
+                setTimeout(() => animateCounter(counter), 100);
+            }
+        });
+    });
+</script>
+{% endblock %}

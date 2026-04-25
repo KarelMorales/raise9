@@ -1,7 +1,7 @@
 {% load static wagtailcore_tags wagtailuserbar %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
     <head>
         <meta charset="utf-8" />
         <title>
@@ -23,24 +23,404 @@
         <base target="_blank">
         {% endif %}
 
-        {# Global stylesheets #}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/raisewesmin.css' %}">
+        {# Google Fonts #}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        
+        {# Swiper CSS for future carousels #}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-        {% block extra_css %}
-        {# Override this in templates to add extra stylesheets #}
-        {% endblock %}
+        {# Tailwind CSS - Premium Agri-Gradient Theme #}
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: '#064e3b',      // Deep Emerald - for deep contrast
+                            secondary: '#d97706',    // Harvest Gold - for buttons/accents
+                            accent: '#10b981',       // Vibrant Leaf Green - for icons/hovers
+                            surface: '#f0fdf4',      // Soft Sage - for backgrounds (stops eye strain)
+                            navdark: '#022c22',      // Very Dark Pine - for navbar
+                            // Depth palette - 3-4 shades for layering
+                            'depth': {
+                                'primary': {
+                                    '50': '#f0fdf4',  // Lightest (same as surface)
+                                    '100': '#dcfce7', // Light shade
+                                    '200': '#bbf7d0', // Mid-light
+                                    '300': '#86efac', // Mid shade
+                                    '400': '#4ade80', // Base accent
+                                    '500': '#10b981', // Original accent
+                                    '600': '#059669', // Mid-dark
+                                    '700': '#047857', // Dark
+                                    '800': '#065f46', // Deep
+                                    '900': '#064e3b', // Original primary
+                                    '950': '#022c22', // Deepest (same as navdark)
+                                },
+                                'secondary': {
+                                    '50': '#fef3c7',  // Lightest
+                                    '100': '#fde68a', // Light shade
+                                    '200': '#fcd34d', // Mid-light
+                                    '300': '#fbbf24', // Mid shade
+                                    '400': '#f59e0b', // Base
+                                    '500': '#d97706', // Original secondary
+                                    '600': '#d97706', // Original secondary
+                                    '700': '#b45309', // Dark
+                                    '800': '#92400e', // Deep
+                                    '900': '#78350f', // Deepest
+                                },
+                                'neutral': {
+                                    '50': '#ffffff',  // Pure white
+                                    '100': '#f9fafb', // Lightest gray
+                                    '200': '#f3f4f6', // Light gray
+                                    '300': '#e5e7eb', // Mid-light gray
+                                    '400': '#d1d5db', // Mid gray
+                                    '500': '#9ca3af', // Base gray
+                                    '600': '#6b7280', // Mid-dark gray
+                                    '700': '#4b5563', // Dark gray
+                                    '800': '#374151', // Deep gray
+                                    '900': '#1f2937', // Deepest gray
+                                }
+                            }
+                        },
+                        fontFamily: {
+                            'helvetica': ['Helvetica', 'Arial', 'sans-serif'],
+                            'poppins': ['Poppins', 'sans-serif'],
+                        },
+                        animation: {
+                            'float': 'float 6s ease-in-out infinite',
+                            'gradient': 'gradient 8s linear infinite',
+                        },
+                        boxShadow: {
+                            'depth-xs': '0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 1px rgba(255, 255, 255, 0.8) inset',
+                            'depth-sm': '0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(255, 255, 255, 0.6) inset',
+                            'depth-md': '0 4px 8px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(255, 255, 255, 0.4) inset',
+                            'depth-lg': '0 8px 16px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(255, 255, 255, 0.3) inset',
+                            'depth-xl': '0 16px 32px rgba(0, 0, 0, 0.25), 0 8px 16px rgba(255, 255, 255, 0.2) inset',
+                            'depth-2xl': '0 24px 48px rgba(0, 0, 0, 0.3), 0 12px 24px rgba(255, 255, 255, 0.1) inset',
+                            'inset-sm': 'inset 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 -1px 2px rgba(255, 255, 255, 0.8)',
+                            'inset-md': 'inset 0 2px 4px rgba(0, 0, 0, 0.15), inset 0 -2px 4px rgba(255, 255, 255, 0.6)',
+                            'inset-lg': 'inset 0 4px 8px rgba(0, 0, 0, 0.2), inset 0 -4px 8px rgba(255, 255, 255, 0.4)',
+                            'glow-sm': '0 0 8px rgba(16, 185, 129, 0.3), 0 0 16px rgba(16, 185, 129, 0.1)',
+                            'glow-md': '0 0 12px rgba(16, 185, 129, 0.4), 0 0 24px rgba(16, 185, 129, 0.2)',
+                            'glow-lg': '0 0 16px rgba(16, 185, 129, 0.5), 0 0 32px rgba(16, 185, 129, 0.3)',
+                        },
+                        keyframes: {
+                            float: {
+                                '0%, 100%': { transform: 'translateY(0px)' },
+                                '50%': { transform: 'translateY(-20px)' },
+                            },
+                            gradient: {
+                                '0%, 100%': { backgroundPosition: '0% 50%' },
+                                '50%': { backgroundPosition: '100% 50%' },
+                            }
+                        }
+                    }
+                }
+            }
+        </script>
+        <style>
+            @keyframes float {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-20px); }
+            }
+            .animate-float {
+                animation: float 6s ease-in-out infinite;
+            }
+            .animate-gradient {
+                background-size: 200% 200%;
+                animation: gradient 8s linear infinite;
+            }
+            /* Custom Scrollbar to match theme */
+            ::-webkit-scrollbar { width: 10px; }
+            ::-webkit-scrollbar-track { background: #f0fdf4; }
+            ::-webkit-scrollbar-thumb { background: #064e3b; border-radius: 5px; }
+            ::-webkit-scrollbar-thumb:hover { background: #10b981; }
+        </style>
+
+        {# Global stylesheets #}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/mycms.css' %}">
+        {% block extra_css %}{% endblock %}
     </head>
 
-    <body class="{% block body_class %}{% endblock %}">
+    <body class="{% block body_class %}{% endblock %} bg-surface text-gray-900 font-poppins flex flex-col min-h-screen">
         {% wagtailuserbar %}
 
-        {% block content %}{% endblock %}
+        {# Navigation #}
+        <nav class="bg-gradient-to-r from-navdark to-primary border-b border-accent/20 shadow-xl sticky top-0 z-50">
+            <div class="w-full">
+                <div class="flex justify-between h-20">
+                    <div class="flex items-center pl-12">
+                        <a href="/" class="flex items-center space-x-3 group">
+                            <img src="{% static 'images/RAISE-Logo.png' %}" alt="AANR Knowledge Hub Logo" class="h-10 w-auto transform group-hover:scale-105 transition duration-300">
+                            <div class="flex flex-col">
+                                <span class="text-lg font-helvetica font-bold text-white leading-tight tracking-wide">Raise Western Mindanao</span>
+                                <!-- <span class="text-xs text-accent font-poppins uppercase tracking-wider">km4aanr in WESTERN MINDANAO</span> -->
+                            </div>
+                        </a>
+                    </div>
+                    <div class="hidden lg:flex items-center">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center space-x-1 xl:space-x-3 text-[13px]">
+                        <a href="/" class="text-gray-200 hover:text-secondary transition font-medium px-3 py-2 rounded-lg hover:bg-white/10">Home</a>
+                        <a href="/about/" class="text-gray-200 hover:text-secondary transition font-medium px-3 py-2 rounded-lg hover:bg-white/10">About</a>
+                        
+                        {# Projects Dropdown #}
+                        <div class="relative group">
+                            <button class="flex items-center gap-1 text-gray-200 hover:text-secondary transition font-medium px-3 py-2 rounded-lg hover:bg-white/10">
+                                Projects
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <div class="absolute left-0 mt-2 w-64 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100 overflow-hidden">
+                                <div class="py-2">
+                                    <a href="/projects/" class="block px-4 py-2 text-primary bg-surface font-semibold border-b border-gray-100">All Projects</a>
+                                    <a href="/projects/regional-iptbm/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">RAISE- Regional IPTBM</a>
+                                    <a href="/projects/jhcsc-iptbm/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">JHCSC-IPTBM</a>
+                                    <a href="/projects/zscmst-iptbm/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">ZSCMST-IPTBM</a>
+                                    <a href="/projects/raise-km/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">RAISE - KM</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {# Events & Activities Dropdown #}
+                        <div class="relative group">
+                            <button class="text-gray-200 hover:text-secondary transition font-medium flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-white/10">
+                                Events
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <div class="absolute left-0 mt-2 w-64 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100 overflow-hidden">
+                                <div class="py-2">
+                                    {# Training & Workshop sub-group #}
+                                    <div class="relative group/training">
+                                        <a href="/events-and-activities/training-workshop/" class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">
+                                            Training &amp; Workshop
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                        </a>
+                                        <div class="absolute left-full top-0 ml-1 w-64 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover/training:opacity-100 group-hover/training:visible transition-all duration-300 z-50 border border-gray-100 overflow-hidden">
+                                            <div class="py-2">
+                                                <a href="/events-and-activities/training-workshop/national-trainings/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">National Trainings Attended</a>
+                                                <a href="/events-and-activities/training-workshop/staff-development/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">Staff Development Program</a>
+                                                <a href="/events-and-activities/training-workshop/trainings-sucs-heis/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">Trainings for SUCs and HEIs</a>
+                                                <a href="/events-and-activities/training-workshop/regional-echo/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">Regional Echo of National Trainings</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a href="/events-and-activities/promotional-events/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">Promotional Events</a>
+                                    <a href="/events-and-activities/pitching-competition/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">Pitching Competition</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <a href="/products-and-services/" class="text-gray-200 hover:text-secondary transition font-medium px-3 py-2 rounded-lg hover:bg-white/10 whitespace-nowrap">Products &amp; Services</a>
+                        <a href="/partnerships-and-collaborations/" class="text-gray-200 hover:text-secondary transition font-medium px-3 py-2 rounded-lg hover:bg-white/10">Partnerships</a>
+                        <a href="/resources/" class="text-gray-200 hover:text-secondary transition font-medium px-3 py-2 rounded-lg hover:bg-white/10">Resources</a>
+                        
+                        {# More Dropdown - secondary items #}
+                        <div class="relative group">
+                            <button class="text-gray-200 hover:text-secondary transition font-medium flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-white/10">
+                                More
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <div class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100 overflow-hidden">
+                                <div class="py-2">
+                                    <a href="/commodities/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">
+                                        <span class="flex items-center gap-3">
+                                            <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            Commodities
+                                        </span>
+                                    </a>
+                                    <a href="/forum/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">
+                                        <span class="flex items-center gap-3">
+                                            <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
+                                            Forum
+                                        </span>
+                                    </a>
+                                    <div class="border-t border-gray-100 my-1"></div>
+                                    <p class="px-4 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">Useful Links</p>
+                                    <a href="https://www.dost.gov.ph/knowledge-resources/downloads/category/4-forms.html" target="_blank" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">
+                                        <span class="flex items-center gap-3">
+                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                                            DOST Forms
+                                        </span>
+                                    </a>
+                                    <a href="https://capsurde.net/" target="_blank" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">
+                                        <span class="flex items-center gap-3">
+                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                                            CAPSURDE
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {# Auth Links #}
+                        {% if user.is_authenticated %}
+                        <div class="relative group">
+                            <button class="flex items-center gap-2 text-white hover:text-secondary transition font-medium bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm border border-white/20">
+                                {% if user.profile.avatar %}
+                                <img src="{{ user.profile.avatar.url }}" alt="{{ user.get_full_name }}" class="w-7 h-7 rounded-full object-cover">
+                                {% else %}
+                                <div class="w-7 h-7 bg-gradient-to-br from-secondary to-yellow-500 rounded-full flex items-center justify-center">
+                                    <span class="text-white font-bold text-xs">{{ user.first_name|first|upper|default:user.username|first|upper }}</span>
+                                </div>
+                                {% endif %}
+                                <span>{{ user.first_name|default:user.username }}</span>
+                            </button>
+                            <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100 overflow-hidden">
+                                <div class="py-2">
+                                    
+                                    <a href="/admin/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">Dashboard</a>
+                                    <a href="{% url 'logout' %}" class="block px-4 py-2 text-red-600 hover:bg-red-50 transition border-t border-gray-100">Logout</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="px-6 py-2 bg-gradient-to-r from-secondary to-yellow-600 text-white rounded-full hover:shadow-lg hover:shadow-secondary/30 transition transform hover:-translate-y-0.5 font-medium">Login</a>
+                        {% endif %}
+                        </div>
+                    </div>
+                    
+                    {# Mobile Menu Button #}
+                    <div class="lg:hidden flex items-center">
+                        <button id="mobile-menu-button" class="text-gray-200 hover:text-secondary focus:outline-none">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            {# Mobile Menu Dropdown (Fully Restored) #}
+            <div id="mobile-menu" class="hidden lg:hidden bg-navdark border-t border-primary/30 shadow-inner">
+                <div class="px-2 pt-2 pb-3 space-y-1">
+                    <a href="/" class="block px-3 py-2 text-gray-200 hover:bg-primary/50 hover:text-white rounded transition">Home</a>
+                    <a href="/about/" class="block px-3 py-2 text-gray-200 hover:bg-primary/50 hover:text-white rounded transition">About</a>
+                    
+                    {# Useful Links Mobile #}
+                    <div class="px-3 py-2">
+                        <button onclick="toggleMobileSubmenu('useful-links')" class="w-full flex items-center justify-between text-gray-200 hover:text-accent">
+                            <span>Useful Links</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="useful-links-mobile" class="hidden pl-4 mt-2 space-y-1">
+                            <a href="https://www.dost.gov.ph/knowledge-resources/downloads/category/4-forms.html" target="_blank" class="block px-3 py-2 text-gray-400 hover:text-white transition text-sm">DOST Forms</a>
+                            <a href="https://capsurde.net/" target="_blank" class="block px-3 py-2 text-gray-400 hover:text-white transition text-sm">CAPSURDE</a>
+                        </div>
+                    </div>
+                    
+                    {# Commodities Mobile #}
+                    <div class="px-3 py-2">
+                        <button onclick="toggleMobileSubmenu('commodities')" class="w-full flex items-center justify-between text-gray-200 hover:text-accent">
+                            <span>Commodities</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="commodities-mobile" class="hidden pl-4 mt-2 space-y-1 max-h-64 overflow-y-auto">
+                            <a href="/commodities/" class="block px-3 py-2 text-accent font-semibold text-sm">All Commodities</a>
+                            <a href="/commodities/fish/" class="block px-3 py-2 text-gray-400 hover:text-white transition text-sm">Fish</a>
+                            <a href="/commodities/eggplant/" class="block px-3 py-2 text-gray-400 hover:text-white transition text-sm">Eggplant</a>
+                            <a href="/commodities/zampen-native-chicken/" class="block px-3 py-2 text-gray-400 hover:text-white transition text-sm">ZamPen Native Chicken</a>
+                            <a href="/commodities/seaweed/" class="block px-3 py-2 text-gray-400 hover:text-white transition text-sm">Seaweed</a>
+                            <a href="/commodities/rice/" class="block px-3 py-2 text-gray-400 hover:text-white transition text-sm">Rice</a>
+                            <a href="/commodities/bamboo/" class="block px-3 py-2 text-gray-400 hover:text-white transition text-sm">Bamboo</a>
+                            <a href="/commodities/aquaphonics/" class="block px-3 py-2 text-gray-400 hover:text-white transition text-sm">Aquaphonics</a>
+                            <a href="/commodities/camote-tops/" class="block px-3 py-2 text-gray-400 hover:text-white transition text-sm">Camote Tops</a>
+                        </div>
+                    </div>
+
+                    {# Events & Activities Mobile #}
+                    <div class="px-3 py-2">
+                        <button onclick="toggleMobileSubmenu('events')" class="w-full flex items-center justify-between text-gray-200 hover:text-accent">
+                            <span>Events &amp; Activities</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="events-mobile" class="hidden pl-4 mt-2 space-y-1">
+                            <button onclick="toggleMobileSubmenu('training')" class="w-full flex items-center justify-between text-gray-400 hover:text-white text-sm">
+                                <span>Training &amp; Workshop</span>
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <div id="training-mobile" class="hidden pl-4 mt-1 space-y-1">
+                                <a href="/events-and-activities/training-workshop/national-trainings/" class="block px-3 py-1 text-gray-400 hover:text-white transition text-xs">National Trainings Attended</a>
+                                <a href="/events-and-activities/training-workshop/staff-development/" class="block px-3 py-1 text-gray-400 hover:text-white transition text-xs">Staff Development Program</a>
+                                <a href="/events-and-activities/training-workshop/trainings-sucs-heis/" class="block px-3 py-1 text-gray-400 hover:text-white transition text-xs">Trainings for SUCs and HEIs</a>
+                                <a href="/events-and-activities/training-workshop/regional-echo/" class="block px-3 py-1 text-gray-400 hover:text-white transition text-xs">Regional Echo of National Trainings</a>
+                            </div>
+                            <a href="/events-and-activities/promotional-events/" class="block px-3 py-2 text-gray-400 hover:text-white transition text-sm">Promotional Events</a>
+                            <a href="/events-and-activities/pitching-competition/" class="block px-3 py-2 text-gray-400 hover:text-white transition text-sm">Pitching Competition</a>
+                        </div>
+                    </div>
+
+                    <a href="/products-and-services/" class="block px-3 py-2 text-gray-200 hover:bg-primary/50 hover:text-white rounded transition">Products &amp; Services</a>
+                    <a href="/partnerships-and-collaborations/" class="block px-3 py-2 text-gray-200 hover:bg-primary/50 hover:text-white rounded transition">Partnerships</a>
+                    <a href="/resources/" class="block px-3 py-2 text-gray-200 hover:bg-primary/50 hover:text-white rounded transition">Resources</a>
+                    <a href="/forum/" class="block px-3 py-2 text-gray-200 hover:bg-primary/50 hover:text-white rounded transition">Forum</a>
+                    <a href="/faqs/" class="block px-3 py-2 text-gray-200 hover:bg-primary/50 hover:text-white rounded transition">FAQs</a>
+                </div>
+            </div>
+        </nav>
+
+        {# Main Content #}
+        <main class="flex-grow">
+            {% block content %}{% endblock %}
+        </main>
+
+        {# Footer (Fully Restored with SVGs) #}
+        <footer class="bg-gradient-to-br from-navdark to-primary text-white mt-16 border-t-4 border-secondary relative overflow-hidden">
+            <!-- Subtle decorative background element -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-3xl"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4 font-helvetica text-accent">km4aanr in WESTERN MINDANAO</h3>
+                        <p class="text-gray-300 text-sm leading-relaxed">AANR Knowledge Hub - Knowledge Management for Agriculture, Aquatic and Natural Resources.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-4 text-secondary uppercase tracking-widest text-sm">Quick Links</h4>
+                        <ul class="space-y-2">
+                            <li><a href="/about/" class="text-gray-300 hover:text-white transition flex items-center gap-2 text-sm"><span class="text-accent text-xs">▶</span> About</a></li>
+                            <li><a href="/programs/" class="text-gray-300 hover:text-white transition flex items-center gap-2 text-sm"><span class="text-accent text-xs">▶</span> Programs</a></li>
+                            <li><a href="/news/" class="text-gray-300 hover:text-white transition flex items-center gap-2 text-sm"><span class="text-accent text-xs">▶</span> News & Events</a></li>
+                            <li><a href="/contact/" class="text-gray-300 hover:text-white transition flex items-center gap-2 text-sm"><span class="text-accent text-xs">▶</span> Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-4 text-secondary uppercase tracking-widest text-sm">Connect With Us</h4>
+                        <div class="flex space-x-4">
+                            <!-- Facebook Icon restored -->
+                            <a href="#" class="text-gray-300 hover:text-accent transition transform hover:scale-110">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                </svg>
+                            </a>
+                            <!-- Twitter Icon restored -->
+                            <a href="#" class="text-gray-300 hover:text-accent transition transform hover:scale-110">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-white/10 mt-8 pt-8 text-center text-gray-400 text-sm">
+                    <p>&copy; {% now "Y" %} AANR Knowledge Hub - Western Mindanao. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
 
         {# Global javascript #}
-        <script type="text/javascript" src="{% static 'js/raisewesmin.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/mycms.js' %}"></script>
+        <script>
+            // Mobile menu toggle
+            document.getElementById('mobile-menu-button').addEventListener('click', function() {
+                document.getElementById('mobile-menu').classList.toggle('hidden');
+            });
+            
+            // Mobile submenu toggle function
+            function toggleMobileSubmenu(menuId) {
+                const submenu = document.getElementById(menuId + '-mobile');
+                submenu.classList.toggle('hidden');
+            }
+        </script>
 
-        {% block extra_js %}
-        {# Override this in templates to add extra javascript #}
-        {% endblock %}
+        {% block extra_js %}{% endblock %}
     </body>
 </html>
