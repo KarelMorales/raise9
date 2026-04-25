@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block extra_css %}
+<style>
+    body { 
+        background-color: #f1f5f1; 
+        color: #064e3b;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    .editorial-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+    }
+
+    .section-label {
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.25em;
+        color: #1e293b;
+        margin-bottom: 25px;
+        display: block;
+        border-bottom: 3px solid #10b981;
+        padding-bottom: 10px;
+        width: fit-content;
+    }
+
+    .glass-card {
+        background: #fcfdfc; 
+        border-radius: 32px;
+        padding: 45px;
+        box-shadow: 0 15px 35px -10px rgba(6, 78, 59, 0.05);
+        border: 1px solid rgba(16, 185, 129, 0.1);
+    }
+
+    .narrative-line {
+        position: relative;
+        padding-left: 40px;
+        border-left: 2px solid rgba(16, 185, 129, 0.2);
+    }
+    .narrative-watermark {
+        position: absolute; top: -20px; left: -10px;
+        font-family: 'Helvetica', Arial, sans-serif; font-size: 100px; font-weight: 900;
+        color: #064e3b; opacity: 0.03; pointer-events: none;
+    }
+
+    .goal-statement-box {
+        background: #022c22;
+        border-radius: 28px;
+        padding: 40px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .project-tile {
+        background: white;
+        border-radius: 24px;
+        padding: 30px;
+        border: 1px solid rgba(16, 185, 129, 0.25);
+        transition: all 0.4s ease;
+    }
+    .project-tile:hover {
+        background: #022c22;
+        transform: translateY(-10px);
+    }
+    .project-tile:hover * { color: white !important; }
+
+    @media (max-width: 1024px) {
+        .editorial-container { padding: 0 20px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- 1. HERO SECTION -->
+<section class="relative bg-gradient-to-br from-navdark via-primary to-navdark text-white pt-24 pb-40 overflow-hidden">
+    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 1px, transparent 0); background-size: 40px 40px;"></div>
+    <div class="editorial-container relative z-10 text-center">
+        <div class="inline-block px-5 py-2 bg-white/10 backdrop-blur-md rounded-full mb-8 border border-white/20">
+            <span class="text-accent font-black text-[10px] uppercase tracking-[0.3em]">Program Profile</span>
+        </div>
+        <h1 class="text-5xl md:text-7xl font-helvetica font-bold leading-tight mb-8">
+            <span class="bg-gradient-to-r from-accent via-green-200 to-white bg-clip-text text-transparent">Our Foundation</span>
+        </h1>
+        {% if page.hero_subtitle %}
+        <p class="text-xl md:text-2xl text-green-50/70 max-w-4xl mx-auto font-light leading-relaxed italic">"{{ page.hero_subtitle }}"</p>
+        {% endif %}
+    </div>
+    <div class="absolute bottom-0 left-0 right-0 leading-[0]">
+        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H0Z" fill="#f1f5f1"/>
+        </svg>
+    </div>
+</section>
+
+<!-- 2. PROGRAM RATIONALE & OBJECTIVES -->
+<div class="editorial-container py-20 relative z-20">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-stretch">
+        
+        <!-- LEFT: RATIONALE -->
+        <div class="lg:col-span-7">
+            <div class="narrative-line h-full">
+                <div class="narrative-watermark">WHY</div>
+                <span class="section-label">Program Rationale</span>
+                <h2 class="text-4xl md:text-5xl font-helvetica font-bold text-navdark mb-10 leading-tight">
+                    Driving the Future of <br> <span class="text-accent">Agri-Innovation</span>
+                </h2>
+                <div class="text-lg leading-relaxed text-slate-600 space-y-6">
+                    {% if page.program_rationale %}
+                        {{ page.program_rationale|richtext }}
+                    {% else %}
+                        <p>The Western Mindanao State University (WMSU) along with Consortium Member Institutions (CMIs) have collectively provided R&D outputs utilized through funded projects. These projects provide IP and ATBI services across the region.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: OBJECTIVES -->
+        <div class="lg:col-span-5 flex flex-col justify-between">
+            <div>
+                <span class="section-label">Strategic Roadmap</span>
+                <div class="goal-statement-box mb-8 shadow-xl">
+                    <span class="text-[10px] font-black text-secondary uppercase tracking-[0.4em] block mb-4">The Mission</span>
+                    <p class="text-xl font-helvetica italic text-white leading-relaxed">
+                        {% if page.program_objectives_general %}
+                            {{ page.program_objectives_general|striptags }}
+                        {% else %}
+                            To advance technology transfer, business incubation, and knowledge sharing across Western Mindanao's AANR sector.
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="bg-white/40 p-6 rounded-2xl border border-white text-sm text-slate-600 italic">
+                    {% if page.program_objectives_specific %}
+                        {{ page.program_objectives_specific|richtext }}
+                    {% else %}
+                        <p>Specific objectives will be listed here once added through the CMS.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- STAT BAR -->
+            <div class="mt-12 pt-8 border-t border-primary/10 flex items-center justify-between">
+                <div class="flex gap-6">
+                    <div class="text-center">
+                        <p class="text-lg font-black text-primary leading-none">1,000+</p>
+                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Resources</p>
+                    </div>
+                    <div class="w-px h-8 bg-slate-200"></div>
+                    <div class="text-center">
+                        <p class="text-lg font-black text-primary leading-none">500+</p>
+                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Members</p>
+                    </div>
+                    <div class="w-px h-8 bg-slate-200"></div>
+                    <div class="text-center">
+                        <p class="text-lg font-black text-primary leading-none">50+</p>
+                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Programs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 3. FLAGSHIP PROJECTS -->
+<section class="py-24 bg-white border-y border-slate-100">
+    <div class="editorial-container">
+        <div class="text-center mb-16">
+            <span class="section-label !mx-auto">Our Portfolio</span>
+            <h2 class="text-4xl md:text-5xl font-helvetica font-bold text-navdark mt-4">Flagship Initiatives</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="project-tile group cursor-pointer">
+                <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-primary mb-6 group-hover:bg-accent group-hover:text-white transition">🔬</div>
+                <h4 class="text-lg font-bold text-navdark mb-2">JHCSC-IPTBM</h4>
+                <p class="text-slate-500 text-sm mb-6">To implement Intellectual Property and Technology Business Management (IP-TBM) program of the institution in order to enhance their technology management capabilities.</p>
+                <a href="/projects/" class="text-[10px] font-black uppercase text-secondary tracking-widest group-hover:text-accent">View Project →</a>
+            </div>
+            <div class="project-tile group cursor-pointer">
+                <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-primary mb-6 group-hover:bg-accent group-hover:text-white transition">📊</div>
+                <h4 class="text-lg font-bold text-navdark mb-2">RAISE - KM</h4>
+                <p class="text-slate-500 text-sm mb-6">To enhance the knowledge management services of selected CMIs and facilitate the improvement of the Inventory of Knowledge Resources.</p>
+                <a href="/projects/" class="text-[10px] font-black uppercase text-secondary tracking-widest group-hover:text-accent">View Project →</a>
+            </div>
+            <div class="project-tile group cursor-pointer">
+                <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-primary mb-6 group-hover:bg-accent group-hover:text-white transition">🌱</div>
+                <h4 class="text-lg font-bold text-navdark mb-2">RAISE Regional IPTBM</h4>
+                <p class="text-slate-500 text-sm mb-6">To establish the Regional IPTBM in Western Mindanao to intensify the technology commercialization activities of participating CMIs.</p>
+                <a href="/projects/" class="text-[10px] font-black uppercase text-secondary tracking-widest group-hover:text-accent">View Project →</a>
+            </div>
+            <div class="project-tile group cursor-pointer">
+                <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-primary mb-6 group-hover:bg-accent group-hover:text-white transition">🤝</div>
+                <h4 class="text-lg font-bold text-navdark mb-2">ZSCMST-IPTBM</h4>
+                <p class="text-slate-500 text-sm mb-6">To strengthen the capacities of Intellectual Property and Technology Business Management (IPTBM) operations of the Zamboanga State College of Marine Sciences and Technology.</p>
+                <a href="/projects/" class="text-[10px] font-black uppercase text-secondary tracking-widest group-hover:text-accent">View Project →</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 4. ORGANIZATIONAL STRUCTURE -->
+<section class="py-24 bg-surface">
+    <div class="editorial-container">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+            <div class="lg:col-span-4">
+                <span class="section-label">Governance</span>
+                <h2 class="text-4xl font-helvetica font-bold text-navdark mb-6 leading-tight">
+                    {% if page.org_structure_title %}{{ page.org_structure_title }}{% else %}Our Organizational Structure{% endif %}
+                </h2>
+                <p class="text-slate-500 leading-relaxed font-light">
+                    {% if page.org_structure_description %}{{ page.org_structure_description }}{% else %}Our governance structure ensures effective program management and coordination across all member institutions.{% endif %}
+                </p>
+            </div>
+            <div class="lg:col-span-8">
+                {% if page.org_structure_image %}
+                <div class="bg-white p-4 rounded-[2.5rem] shadow-2xl border border-primary/5 group">
+                    <div class="overflow-hidden rounded-2xl">
+                        {% image page.org_structure_image width-1200 class="w-full h-auto transform group-hover:scale-[1.01] transition duration-700" %}
+                    </div>
+                </div>
+                {% else %}
+                <div class="bg-white p-4 rounded-[2.5rem] shadow-2xl border border-primary/5 flex items-center justify-center h-64">
+                    <p class="text-slate-400 italic text-sm">Organizational chart will appear here once uploaded in the CMS.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 5. GUIDING PRINCIPLES -->
+{% if page.mission or page.vision or page.objectives %}
+<section class="py-24 bg-navdark text-white relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5" style="background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');"></div>
+    <div class="editorial-container relative z-10">
+        <div class="text-center mb-20">
+            <span class="text-accent font-black text-[10px] uppercase tracking-[0.4em]">Core Values</span>
+            <h2 class="text-4xl md:text-5xl font-helvetica font-bold mt-4">The Pillars of RAISE</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div class="bg-white/5 backdrop-blur-md rounded-3xl p-12 border border-white/10 relative group hover:bg-white/10 transition-all duration-500">
+                <div class="absolute -top-6 left-10 w-12 h-12 bg-accent rounded-2xl flex items-center justify-center text-navdark text-2xl shadow-xl group-hover:scale-110 transition">✨</div>
+                <h3 class="text-2xl font-helvetica font-bold text-accent mb-6 pt-4">Mission</h3>
+                <div class="text-slate-300 text-sm leading-relaxed">{{ page.mission|richtext }}</div>
+            </div>
+            <div class="bg-white/5 backdrop-blur-md rounded-3xl p-12 border border-white/10 relative group hover:bg-white/10 transition-all duration-500">
+                <div class="absolute -top-6 left-10 w-12 h-12 bg-secondary rounded-2xl flex items-center justify-center text-white text-2xl shadow-xl group-hover:scale-110 transition">👁️</div>
+                <h3 class="text-2xl font-helvetica font-bold text-secondary mb-6 pt-4">Vision</h3>
+                <div class="text-slate-300 text-sm leading-relaxed">{{ page.vision|richtext }}</div>
+            </div>
+            <div class="bg-white/5 backdrop-blur-md rounded-3xl p-12 border border-white/10 relative group hover:bg-white/10 transition-all duration-500">
+                <div class="absolute -top-6 left-10 w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-white text-2xl shadow-xl group-hover:scale-110 transition">🎯</div>
+                <h3 class="text-2xl font-helvetica font-bold text-emerald-400 mb-6 pt-4">Core Focus</h3>
+                <div class="text-slate-300 text-sm leading-relaxed">{{ page.objectives|richtext }}</div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock content %}

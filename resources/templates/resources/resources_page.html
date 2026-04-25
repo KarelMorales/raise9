@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block title %}Resources{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-br from-navdark via-primary to-emerald-800 text-white overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-10 left-10 w-72 h-72 bg-accent rounded-full blur-3xl"></div>
+        <div class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full blur-3xl"></div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
+        <nav class="flex items-center space-x-2 text-sm text-gray-300 mb-6">
+            <a href="/" class="hover:text-white transition">Home</a>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+            <span class="text-secondary">Resources</span>
+        </nav>
+
+        <h1 class="text-4xl md:text-5xl font-bold font-helvetica mb-4">Resources</h1>
+
+        {% if page.page_subtitle %}
+        <p class="text-xl text-gray-200 max-w-3xl">{{ page.page_subtitle }}</p>
+        {% endif %}
+
+        {% if page.page_description %}
+        <p class="text-lg text-gray-300 max-w-3xl mt-4 leading-relaxed">{{ page.page_description }}</p>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Resource Links -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-primary uppercase tracking-wide">External Resources</h2>
+        <div class="w-16 h-1 bg-accent rounded-full mx-auto mt-3"></div>
+    </div>
+
+    <div class="space-y-16 max-w-4xl mx-auto">
+
+        {% for resource in page.resources.all %}
+
+        <a href="{{ resource.url }}" target="_blank" rel="noopener noreferrer"
+            class="group bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-2xl hover:border-accent/50 transition-all duration-500 block">
+
+            <!-- Resource Header -->
+            <div class="flex items-center gap-6 p-8 bg-gradient-to-r from-gray-50 to-white">
+
+                <!-- Image -->
+                <div class="relative w-32 h-32 flex-shrink-0">
+                    {% if resource.image %}
+                        {% image resource.image fill-128x128 as res_img %}
+                        <img src="{{ res_img.url }}" alt="{{ resource.title }}" class="w-full h-full object-contain">
+                    {% elif resource.title == "DOST-PCAARRD E-Library" %}
+                        <img src="{% static 'images/cloud.gif' %}" alt="{{ resource.title }}" class="w-full h-full object-contain">
+                    {% elif resource.title == "DOST-PCAARRD Advanced Learning Management System" %}
+                        <img src="{% static 'images/learning-book.gif' %}" alt="{{ resource.title }}" class="w-full h-full object-contain">
+                    {% else %}
+                        <img src="{% static 'images/knowledge_management.png' %}" alt="{{ resource.title }}" class="w-full h-full object-contain">
+                    {% endif %}
+                </div>
+
+                <!-- Content -->
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="bg-accent/10 text-accent text-xs font-bold px-3 py-1.5 rounded-full">
+                            EXTERNAL RESOURCE
+                        </span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-primary mb-3 group-hover:text-accent transition-colors duration-300">
+                        {{ resource.title }}
+                    </h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        {{ resource.description }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Resource Footer -->
+            <div class="px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-end">
+                <div class="inline-flex items-center gap-3 px-6 py-2.5 bg-accent text-white font-semibold rounded-full hover:bg-primary transition-all duration-300 group-hover:gap-4">
+                    <span>Visit Resource</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                    </svg>
+                </div>
+            </div>
+
+        </a>
+
+        {% empty %}
+
+        <div class="text-center py-20 text-gray-400">
+            <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+            <p class="text-lg font-medium">No resources added yet.</p>
+            <p class="text-sm mt-1">Add resources from the CMS admin panel.</p>
+        </div>
+
+        {% endfor %}
+
+    </div>
+</section>
+
+{% endblock %}
