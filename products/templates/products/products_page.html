@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block title %}Products &amp; Services{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-br from-navdark via-primary to-emerald-800 text-white overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-10 left-10 w-72 h-72 bg-accent rounded-full blur-3xl"></div>
+        <div class="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full blur-3xl"></div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
+        <nav class="flex items-center space-x-2 text-sm text-gray-300 mb-6">
+            <a href="/" class="hover:text-white transition">Home</a>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <span class="text-secondary">Products & Services</span>
+        </nav>
+        <h1 class="text-4xl md:text-5xl font-bold font-helvetica mb-4">{{ page.page_title }}</h1>
+        {% if page.page_subtitle %}
+        <p class="text-xl text-gray-200 max-w-3xl">{{ page.page_subtitle }}</p>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Services Grid -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h2 class="text-2xl font-bold text-primary mb-2">Our Offerings</h2>
+    <p class="text-gray-500 mb-10">Explore our intellectual property services, products, and technology showcases.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {% for service in page.services.all %}
+        <a href="{{ service.url }}" class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl border-2 border-gray-200 hover:border-accent/50 overflow-hidden transition-all duration-300 transform hover:-translate-y-2 block">
+            <!-- Service Image -->
+            <div class="relative h-52 overflow-hidden">
+                {% if service.image %}
+                    {% image service.image fill-400x200 as svc_img %}
+                    <img src="{{ svc_img.url }}" alt="{{ service.title }}" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500">
+                {% else %}
+                    <img src="{% static 'images/goma.jpg' %}" alt="{{ service.title }}" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500">
+                {% endif %}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                <span class="absolute bottom-3 left-4 bg-accent/90 text-white text-xs font-semibold px-3 py-1 rounded-full backdrop-blur-sm flex items-center gap-1.5">
+                    <span class="text-base">{{ service.icon }}</span>
+                    {{ service.title }}
+                </span>
+            </div>
+            <!-- Service Info -->
+            <div class="p-6">
+                <h3 class="text-lg font-bold text-primary mb-3 group-hover:text-accent transition">{{ service.title }}</h3>
+                <p class="text-gray-600 text-sm leading-relaxed mb-4">{{ service.description }}</p>
+                <span class="inline-flex items-center gap-2 text-accent font-semibold text-sm group-hover:gap-3 transition-all">
+                    Learn More
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </span>
+            </div>
+        </a>
+        {% empty %}
+        <div class="col-span-3 text-center py-10 text-gray-400">
+            <p class="text-sm">No services added yet. Add them from the CMS admin panel.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center gap-3 mb-2">
+            <div class="w-10 h-1 bg-accent rounded-full"></div>
+            <h2 class="text-2xl font-bold text-primary">Featured Incubatee Products</h2>
+        </div>
+        <p class="text-gray-500 mb-10">Innovative products developed by RAISE-supported startups and incubatees.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {% for product in page.featured_products.all %}
+            <div class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl border-2 border-gray-200 overflow-hidden transition-all duration-300 transform hover:-translate-y-2">
+                <!-- Product Image -->
+                <div class="relative h-52 overflow-hidden">
+                    {% if product.image %}
+                        {% image product.image fill-400x200 as prod_img %}
+                        <img src="{{ prod_img.url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    {% else %}
+                        <img src="{% static 'images/goma.jpg' %}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    {% endif %}
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    {% if product.category %}
+                    <span class="absolute bottom-3 left-4 bg-accent/90 text-white text-xs font-semibold px-3 py-1 rounded-full backdrop-blur-sm">{{ product.category }}</span>
+                    {% endif %}
+                </div>
+                <!-- Product Info -->
+                <div class="p-6">
+                    <h3 class="text-lg font-bold text-primary mb-1">{{ product.name }}</h3>
+                    {% if product.creator %}
+                    <p class="text-sm text-accent font-medium mb-3">{{ product.creator }}</p>
+                    {% endif %}
+                    <p class="text-gray-600 text-sm leading-relaxed">{{ product.description }}</p>
+                    {% if product.url %}
+                    <a href="{{ product.url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-4 text-accent font-semibold text-sm hover:gap-3 transition-all">
+                        Learn More
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-3 text-center py-10 text-gray-400">
+                <p class="text-sm">No featured products added yet. Add them from the CMS admin panel.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Contact CTA -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="bg-gradient-to-r from-navdark via-primary to-emerald-800 rounded-2xl p-10 md:p-14 text-white text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute -top-10 -left-10 w-60 h-60 bg-accent rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-10 -right-10 w-72 h-72 bg-secondary rounded-full blur-3xl"></div>
+        </div>
+        <div class="relative z-10">
+            <h2 class="text-3xl font-bold mb-4">Interested in Our Technologies?</h2>
+            <p class="text-gray-200 max-w-2xl mx-auto mb-8">Our intellectual property assets are open for licensing and commercialization opportunities. We welcome collaborations with partners and investors interested in bringing these innovations to market.</p>
+            <a href="mailto:{{ page.contact_email }}" class="inline-flex items-center gap-2 px-8 py-3 bg-white text-primary font-semibold rounded-full hover:bg-accent hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                Contact Us
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
