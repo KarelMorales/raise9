@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block extra_css %}
+<style>
+    /* Card Animation Styles */
+    .project-card {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    
+    .project-card.animate-in {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{# Hero Section - Deep Emerald Gradient #}
+<section class="relative bg-gradient-to-br from-navdark via-primary to-navdark text-white py-20 overflow-hidden">
+    <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#10b981 1px, transparent 1px); background-size: 30px 30px;"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        <div class="inline-block px-4 py-1 bg-white/10 backdrop-blur-md rounded-full mb-6 border border-white/20">
+            <span class="text-accent font-bold text-xs uppercase tracking-widest">Our Initiatives</span>
+        </div>
+        <h1 class="text-5xl md:text-7xl font-helvetica font-bold mb-6 tracking-tight">RAISE Projects</h1>
+        <div class="text-xl text-surface/80 max-w-3xl mx-auto font-light leading-relaxed">
+            {% if page.intro %}{{ page.intro|richtext }}{% else %}Advancing agricultural innovation through strategic research and technology transfer.{% endif %}
+        </div>
+    </div>
+</section>
+
+{# Main Grid Section #}
+<section class="py-16 bg-surface min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {# Filter Tabs - Redesigned to look like a Dashboard Toggle #}
+        <div class="flex flex-wrap justify-center gap-2 mb-16 bg-white/50 p-2 rounded-2xl w-fit mx-auto border border-primary/5 shadow-inner">
+            <button class="filter-btn active px-8 py-3 rounded-xl font-bold transition-all bg-primary text-white shadow-lg" data-filter="all">All Projects</button>
+            <button class="filter-btn px-8 py-3 rounded-xl font-bold text-gray-500 hover:bg-primary/5 transition-all" data-filter="active">Active</button>
+            <button class="filter-btn px-8 py-3 rounded-xl font-bold text-gray-500 hover:bg-primary/5 transition-all" data-filter="completed">Completed</button>
+            <button class="filter-btn px-8 py-3 rounded-xl font-bold text-gray-500 hover:bg-primary/5 transition-all" data-filter="featured">Featured</button>
+        </div>
+
+        {# THE GRID: Fills the screen, no white space gaps #}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projectGrid">
+            {% for project in projects %}
+            <div class="project-card group relative flex flex-col h-full" 
+                 data-status="{{ project.status }}" data-featured="{{ project.is_featured|yesno:'true,false' }}">
+                
+                {# Layered Shadow Effect - Creates depth #}
+                <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 rounded-[2rem] transform translate-y-2 translate-x-2 opacity-40 group-hover:translate-y-3 group-hover:translate-x-3 transition-all duration-500"></div>
+                
+                {# Main Card Body with Border Gradient #}
+                <div class="relative bg-white rounded-[2rem] overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 border-2 border-transparent bg-clip-padding flex flex-col h-full group-hover:-translate-y-1 group-hover:-translate-x-1">
+                    {# Gradient Border Effect #}
+                    <div class="absolute inset-0 rounded-[2rem] p-[2px] bg-gradient-to-br from-primary/20 via-accent/20 to-secondary/20 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    
+                    {# Image Area #}
+                    <div class="relative h-48 bg-gradient-to-br from-surface via-white to-accent/5 overflow-hidden flex items-center justify-center p-6">
+                        {# Dark Overlay for Depth #}
+                        <div class="absolute inset-0 bg-gradient-to-t from-navdark/60 via-navdark/20 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        
+                        {% if project.hero_image %}
+                            {% image project.hero_image max-240x160 class="max-h-36 w-auto object-contain group-hover:scale-105 transition duration-700 relative z-0" %}
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center relative">
+                                <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, #064e3b 1px, transparent 0); background-size: 32px 32px;"></div>
+                                <svg class="w-20 h-20 text-primary/20 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" stroke-width="1.5"></path></svg>
+                            </div>
+                        {% endif %}
+                        
+                        {# Elevated Badges with Depth #}
+                        <div class="absolute top-6 left-6 flex flex-col gap-2 z-20">
+                            {% if project.is_featured %}
+                                <span class="px-3 py-1 bg-secondary text-white text-[10px] font-bold rounded-lg uppercase tracking-widest shadow-[0_4px_12px_rgba(217,119,6,0.4)] hover:shadow-[0_6px_16px_rgba(217,119,6,0.6)] transition-shadow">★ Featured</span>
+                            {% endif %}
+                            <span class="px-3 py-1 bg-primary text-white text-[10px] font-bold rounded-lg uppercase tracking-widest shadow-[0_4px_12px_rgba(6,78,59,0.4)] hover:shadow-[0_6px_16px_rgba(6,78,59,0.6)] transition-shadow">{{ project.get_status_display }}</span>
+                        </div>
+                    </div>
+
+                {# Content Area - Redesigned with Better Hierarchy #}
+                <div class="p-8 flex flex-col flex-grow relative bg-gradient-to-br from-white via-white to-surface/30">
+                    {# Decorative Gradient Corner with Depth #}
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-accent/10 via-accent/5 to-transparent rounded-bl-[4rem] pointer-events-none opacity-60"></div>
+                    <div class="absolute top-2 right-2 w-40 h-40 bg-gradient-to-br from-primary/5 to-transparent rounded-bl-[4rem] pointer-events-none opacity-40"></div>
+                    
+                    <span class="text-xs font-bold text-secondary uppercase tracking-widest mb-3 block relative z-10 drop-shadow-sm">{{ project.abbreviation }}</span>
+                    <h3 class="text-2xl font-helvetica font-bold text-navdark mb-4 leading-tight group-hover:text-primary transition-colors relative z-10 drop-shadow-sm">
+                        {{ project.title }}
+                    </h3>
+                    
+                    {# Description with subtle inset effect #}
+                    <div class="relative z-10 mb-6 flex-grow">
+                        <div class="text-gray-600 text-sm leading-relaxed p-4 bg-white/60 rounded-xl border border-gray-100/50 shadow-inner max-h-32 overflow-y-auto scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent">
+                            {{ project.short_description }}
+                        </div>
+                    </div>
+
+                    {# CTA Button - Layered 3D Effect #}
+                    <div class="relative z-10">
+                        {# Button Shadow Layer #}
+                        <div class="absolute inset-0 bg-gradient-to-r from-primary/40 to-accent/40 rounded-2xl blur-md transform translate-y-1 -z-10"></div>
+                        
+                        {# Main Button #}
+                        <a href="{% pageurl project %}" class="relative w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-primary via-primary to-accent text-white font-bold text-sm rounded-2xl shadow-[0_8px_16px_rgba(6,78,59,0.3)] hover:shadow-[0_12px_24px_rgba(6,78,59,0.4)] hover:-translate-y-0.5 transition-all duration-300 group/btn overflow-hidden">
+                            {# Inner Glow #}
+                            <div class="absolute inset-0 bg-gradient-to-t from-transparent to-white/10 rounded-2xl pointer-events-none"></div>
+                            
+                            <span class="relative z-10">Explore Project</span>
+                            <svg class="w-5 h-5 transform group-hover/btn:translate-x-1 transition-transform relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{# Filtering Logic & Card Animations #}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.project-card');
+
+    // Animate cards on page load with stagger effect
+    const animateCards = () => {
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.classList.add('animate-in');
+            }, index * 100); // 100ms delay between each card
+        });
+    };
+
+    // Trigger animation on page load
+    animateCards();
+
+    // Filtering logic
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => {
+                b.classList.remove('bg-primary', 'text-white', 'shadow-lg');
+                b.classList.add('text-gray-500');
+            });
+            btn.classList.add('bg-primary', 'text-white', 'shadow-lg');
+            btn.classList.remove('text-gray-500');
+
+            const filter = btn.dataset.filter;
+            
+            // Remove animation class first
+            cards.forEach(card => card.classList.remove('animate-in'));
+            
+            // Filter and re-animate
+            setTimeout(() => {
+                let visibleIndex = 0;
+                cards.forEach(card => {
+                    if (filter === 'all') {
+                        card.classList.remove('hidden');
+                        setTimeout(() => card.classList.add('animate-in'), visibleIndex * 100);
+                        visibleIndex++;
+                    } else if (filter === 'featured') {
+                        if (card.dataset.featured === 'true') {
+                            card.classList.remove('hidden');
+                            setTimeout(() => card.classList.add('animate-in'), visibleIndex * 100);
+                            visibleIndex++;
+                        } else {
+                            card.classList.add('hidden');
+                        }
+                    } else {
+                        if (card.dataset.status === filter) {
+                            card.classList.remove('hidden');
+                            setTimeout(() => card.classList.add('animate-in'), visibleIndex * 100);
+                            visibleIndex++;
+                        } else {
+                            card.classList.add('hidden');
+                        }
+                    }
+                });
+            }, 50);
+        });
+    });
+});
+</script>
+{% endblock %}

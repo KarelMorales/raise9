@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block extra_css %}
+<style>
+    /* Strict Helvetica System */
+    body { 
+        background-color: #f1f5f1; 
+        color: #1e293b;
+        font-family: 'Helvetica', 'Arial', sans-serif;
+        overflow: hidden;
+    }
+
+    .dashboard-container {
+        display: grid;
+        grid-template-columns: 400px 1fr;
+        height: calc(100vh - 80px);
+    }
+
+    /* Left Sidebar Styling */
+    .identity-rail {
+        background: linear-gradient(135deg, #0f4f3f 0%, #022c22 70%, #065f46 100%);
+        color: white;
+        padding: 60px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+        z-index: 30; /* Keep sidebar above sliding content */
+    }
+
+    /* Tab Navigation */
+    .tab-btn {
+        padding: 16px 24px;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        color: #94a3b8;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+        background: white;
+        cursor: pointer;
+        outline: none;
+    }
+    .tab-btn.active {
+        color: #064e3b;
+        border-bottom-color: #10b981;
+    }
+
+    /* --- THE FILMSTRIP CAROUSEL --- */
+    
+    .panels-viewport {
+        position: relative;
+        flex-grow: 1;
+        overflow: hidden; /* This is the "window" we look through */
+        background: white;
+    }
+
+    .panels-filmstrip {
+        display: flex; /* Lines panels up horizontally */
+        height: 100%;
+        width: 400%; /* 4 panels = 400% width */
+        transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1); /* Professional "Smooth-Slowing" curve */
+        will-change: transform;
+    }
+
+    .tab-content { 
+        width: 25%; /* Each panel takes up 1/4 of the 400% strip */
+        height: 100%;
+        padding: 3rem;
+        overflow-y: auto; 
+        background: white;
+        flex-shrink: 0; /* Prevents panels from squishing */
+    }
+
+    /* Custom Scrollbar */
+    .custom-scroll::-webkit-scrollbar { width: 4px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+
+    @media (max-width: 1024px) {
+        body { overflow: auto; }
+        .dashboard-container { grid-template-columns: 1fr; height: auto; }
+        .panels-viewport { height: 600px; }
+        .panels-filmstrip { width: 400%; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    
+    <!-- 1. LEFT RAIL -->
+    <aside class="identity-rail">
+        <div class="relative z-10">
+            <span class="inline-block px-4 py-1.5 bg-accent text-navdark rounded-lg text-[10px] font-bold uppercase tracking-widest mb-6">
+                {{ page.category|default:"Aquaculture" }}
+            </span>
+            <h1 class="text-5xl font-bold leading-tight mb-2 uppercase">{{ page.title }}</h1>
+            <p class="text-xl text-accent italic mb-8 font-light">{{ page.scientific_name|default:"Various species" }}</p>
+            
+            <div class="h-px w-20 bg-accent/30 mb-8"></div>
+            
+            <p class="text-slate-300 leading-relaxed text-sm mb-12">
+                {{ page.short_description|default:"A crucial source of protein for many coastal communities." }}
+            </p>
+        </div>
+
+        <div class="relative z-10 mt-20">
+            <a href="/commodities/" class="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-white transition">
+                ← Back to Repository
+            </a>
+        </div>
+    </aside>
+
+    <!-- 2. MAIN WORKSPACE -->
+    <main class="bg-white flex flex-col overflow-hidden relative">
+        
+        <!-- Tab Bar -->
+        <nav class="flex border-b border-gray-100 px-10 bg-white relative z-20">
+            <button class="tab-btn active" data-index="0">Overview</button>
+            <button class="tab-btn" data-index="1">Benefits</button>
+            <button class="tab-btn" data-index="2">Cultivation</button>
+            <button class="tab-btn" data-index="3">Market Info</button>
+        </nav>
+
+        <!-- Viewport -->
+        <div class="panels-viewport">
+            <!-- The Filmstrip containing all panels side-by-side -->
+            <div class="panels-filmstrip" id="filmstrip">
+                
+                <!-- Tab: Overview -->
+                <div class="tab-content custom-scroll">
+                    <h2 class="text-3xl font-bold text-navdark mb-8 uppercase">Project Overview</h2>
+                    <div class="prose prose-lg max-w-none text-slate-600 leading-relaxed">
+                        {{ page.overview|richtext }}
+                    </div>
+                </div>
+
+                <!-- Tab: Benefits -->
+                <div class="tab-content custom-scroll">
+                    <h2 class="text-3xl font-bold text-navdark mb-8 uppercase">Benefits & Nutrition</h2>
+                    <div class="prose prose-lg max-w-none text-slate-600 leading-relaxed">
+                        {{ page.benefits|richtext }}
+                    </div>
+                </div>
+
+                <!-- Tab: Cultivation -->
+                <div class="tab-content custom-scroll">
+                    <h2 class="text-3xl font-bold text-navdark mb-8 uppercase">Cultivation Practices</h2>
+                    <div class="prose prose-lg max-w-none text-slate-600 leading-relaxed">
+                        {{ page.cultivation|richtext }}
+                    </div>
+                </div>
+
+                <!-- Tab: Market -->
+                <div class="tab-content custom-scroll">
+                    <h2 class="text-3xl font-bold text-navdark mb-8 uppercase">Market Information</h2>
+                    <div class="prose prose-lg max-w-none text-slate-600 leading-relaxed">
+                        {{ page.market_info|richtext }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Sticky Bottom CTA -->
+        <footer class="p-6 border-t border-gray-50 flex justify-between items-center bg-gray-50 px-12 relative z-20">
+            <p class="text-xs text-slate-400 font-medium">RAISE Hub Western Mindanao • Technical Dossier</p>
+            <a href="/forum/" class="bg-secondary text-white px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:scale-105 transition shadow-lg">Consult Experts</a>
+        </footer>
+    </main>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const tabs = document.querySelectorAll('.tab-btn');
+        const filmstrip = document.getElementById('filmstrip');
+
+        tabs.forEach((tab) => {
+            tab.addEventListener('click', () => {
+                const index = tab.getAttribute('data-index');
+                
+                // Update Tab Buttons
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                // Move the Filmstrip
+                // Index 0 = 0%, Index 1 = -25%, Index 2 = -50%, Index 3 = -75%
+                const movePercentage = index * 25; 
+                filmstrip.style.transform = `translateX(-${movePercentage}%)`;
+            });
+        });
+    });
+</script>
+{% endblock %}

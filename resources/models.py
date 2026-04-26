@@ -10,7 +10,31 @@ class ResourceItem(Orderable):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     url = models.URLField()
-    image = models.ForeignKey(          # ← add this
+    image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    panels = [
+        FieldPanel('title'),
+        FieldPanel('description'),
+        FieldPanel('url'),
+        FieldPanel('image'),
+    ]
+
+
+class CommodityItem(Orderable):
+    page = ParentalKey('ResourcesPage', on_delete=models.CASCADE, related_name='commodities')
+    name = models.CharField(max_length=255)
+    category = models.CharField(max_length=100, blank=True)
+    scientific_name = models.CharField(max_length=255, blank=True)
+    short_description = models.TextField(blank=True)
+    overview = RichTextField(blank=True)
+    benefits = RichTextField(blank=True)
+    cultivation = RichTextField(blank=True)
+    market_info = RichTextField(blank=True)
+    image = models.ForeignKey(
         'wagtailimages.Image',
         null=True, blank=True,
         on_delete=models.SET_NULL,
@@ -18,10 +42,15 @@ class ResourceItem(Orderable):
     )
 
     panels = [
-        FieldPanel('title'),
-        FieldPanel('description'),
-        FieldPanel('url'),
-        FieldPanel('image'),            # ← add this
+        FieldPanel('name'),
+        FieldPanel('category'),
+        FieldPanel('scientific_name'),
+        FieldPanel('short_description'),
+        FieldPanel('image'),
+        FieldPanel('overview'),
+        FieldPanel('benefits'),
+        FieldPanel('cultivation'),
+        FieldPanel('market_info'),
     ]
 
 
@@ -30,15 +59,13 @@ class ResourcesPage(Page):
         blank=True,
         default="Access curated knowledge resources for agriculture, aquatic and natural resources."
     )
-    page_description = models.TextField(
-        blank=True,
-        default=""
-    )
+    page_description = models.TextField(blank=True, default="")
 
     content_panels = Page.content_panels + [
         FieldPanel('page_subtitle'),
         FieldPanel('page_description'),
-        InlinePanel('resources', label="Resources"),
+        InlinePanel('resources', label="External Resources"),
+        InlinePanel('commodities', label="Commodities"),
     ]
 
     class Meta:

@@ -31,6 +31,8 @@ INSTALLED_APPS = [
     "partnerships",
     "products",
     "events",
+    "commodities",
+    "projects",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
