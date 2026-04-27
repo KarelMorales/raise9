@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags %}
+
+{% block body_class %}template-forumtopicpage{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Design System Consistency */
+    body { background-color: #f1f5f1; color: #064e3b; font-family: 'Poppins', sans-serif; }
+    .editorial-container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+
+    .section-label {
+        font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.25em;
+        color: #1e293b; margin-bottom: 20px; display: block;
+        border-bottom: 3px solid #10b981; padding-bottom: 8px; width: fit-content;
+    }
+
+    /* Main Post Paper Style */
+    .post-paper {
+        background: #fcfdfc;
+        border: 1px solid #e2e8f0;
+        padding: 50px;
+        box-shadow: 0 20px 40px -20px rgba(6, 78, 59, 0.1);
+        position: relative;
+    }
+
+    /* Reply Row Styling */
+    .reply-row {
+        background: white;
+        border-left: 4px solid #e2e8f0;
+        padding: 30px 40px;
+        margin-bottom: 2px;
+        transition: all 0.3s ease;
+    }
+    .reply-row.is-solution {
+        border-left-color: #10b981;
+        background-color: #f0fdf4;
+    }
+
+    .back-nav {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: rgba(255,255,255,0.6);
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 30px;
+        transition: all 0.3s ease;
+    }
+    .back-nav:hover { color: #f97316; }
+
+    @media (max-width: 1024px) {
+        .editorial-container { padding: 0 20px; }
+        .post-paper { padding: 30px 20px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- 1. DARK HEADER (Matches the rest of the site) -->
+<section class="relative bg-gradient-to-br from-navdark via-primary to-navdark text-white pt-12 pb-40 overflow-hidden">
+    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 1px, transparent 0); background-size: 40px 40px;"></div>
+    
+    <div class="editorial-container relative z-10">
+        <!-- Back Button -->
+        <a href="/forum/" class="back-nav group">
+            <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Back to Forum
+        </a>
+
+        <div class="max-w-4xl">
+            <div class="flex flex-wrap gap-2 mb-6">
+                {% for commodity in page.get_commodity_list %}
+                <span class="px-3 py-1 bg-white/10 backdrop-blur-md border border-white/20 text-accent rounded text-[10px] font-black uppercase tracking-widest">
+                    {{ commodity }}
+                </span>
+                {% endfor %}
+            </div>
+            
+            <h1 class="text-4xl md:text-6xl font-helvetica font-bold leading-tight mb-8">{{ page.title }}</h1>
+            
+            <div class="flex flex-wrap items-center gap-8 text-[11px] font-bold uppercase tracking-widest text-green-100/60">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded bg-primary border border-white/20 flex items-center justify-center text-white font-black">{{ page.author_name|first }}</div>
+                    <span>By <span class="text-white">{{ page.author_name }}</span></span>
+                </div>
+                <span>{{ replies_count }} Responses</span>
+                <span>{{ page.views_count }} Views</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- WAVE TRANSITION -->
+    <div class="absolute bottom-0 left-0 right-0 leading-[0]">
+        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H0Z" fill="#f1f5f1"/>
+        </svg>
+    </div>
+</section>
+
+<!-- 2. MAIN CONTENT -->
+<div class="editorial-container py-16 relative z-20">
+    
+    <!-- ORIGINAL POST -->
+    <article class="post-paper mb-16">
+        <span class="section-label">Original Inquiry</span>
+        <div class="prose prose-lg max-w-none text-slate-600 font-light leading-relaxed">
+            {{ page.description|richtext }}
+        </div>
+        <div class="mt-12 pt-8 border-t border-slate-100 flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            <span>Posted on {{ page.first_published_at|date:"F j, Y" }}</span>
+            <div class="flex gap-4">
+                <button onclick="shareOnFacebook()" class="hover:text-primary transition">Share</button>
+            </div>
+        </div>
+    </article>
+
+    <!-- REPLIES SECTION -->
+    <div class="mb-16">
+        <h2 class="text-3xl font-helvetica font-bold text-navdark mb-10 flex items-center gap-4">
+            <span class="p-3 bg-white border border-emerald-100 rounded-xl text-2xl shadow-sm">💬</span> 
+            Community Responses
+        </h2>
+
+        {% if replies %}
+        <div class="shadow-xl shadow-emerald-900/5 overflow-hidden rounded-xl">
+            {% for reply in replies %}
+            <div class="reply-row {% if reply.is_solution %}is-solution{% endif %}">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-slate-100 text-primary font-black flex items-center justify-center rounded shadow-sm">
+                            {{ reply.author_name|first }}
+                        </div>
+                        <div>
+                            <p class="font-bold text-navdark text-sm leading-none mb-1">{{ reply.author_name }}</p>
+                            <p class="text-[10px] text-slate-400 font-medium uppercase tracking-tight">{{ reply.created_at|date:"M d, Y" }}</p>
+                        </div>
+                    </div>
+                    {% if reply.is_solution %}
+                    <span class="bg-primary text-white text-[9px] font-black uppercase px-3 py-1 rounded tracking-tighter">
+                        ✓ Verified Solution
+                    </span>
+                    {% endif %}
+                </div>
+
+                <div class="prose prose-sm max-w-none text-slate-600 leading-relaxed font-light">
+                    {{ reply.content|richtext }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="bg-white border-2 border-dashed border-slate-200 p-16 text-center rounded-3xl">
+            <p class="text-slate-400 font-bold italic">No responses yet. Start the conversation below.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- CTA ACTION SECTION -->
+    <div class="bg-navdark rounded-[2.5rem] p-12 text-center relative overflow-hidden shadow-2xl">
+        <div class="absolute inset-0 bg-primary opacity-20"></div>
+        <div class="relative z-10">
+            <h3 class="text-3xl font-helvetica font-bold text-white mb-4">Contribute your Expertise</h3>
+            <p class="text-green-100/60 max-w-2xl mx-auto mb-10 font-light">Your insights could help fellow researchers and farmers across Western Mindanao.</p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="/admin/" class="bg-secondary text-white px-10 py-4 font-bold text-xs uppercase tracking-[0.2em] rounded-xl hover:scale-105 transition shadow-xl">
+                    Post a Response
+                </a>
+                <a href="/forum/" class="bg-white/10 text-white px-10 py-4 font-bold text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-white/20 transition border border-white/10">
+                    Back to Forum
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function shareOnFacebook() { window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank'); }
+</script>
+
+{% endblock content %}

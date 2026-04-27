@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body_class %}template-loginpage{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Editorial System Consistency */
+    body { 
+        background-color: #f1f5f1; 
+        color: #064e3b;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* Custom Input Styling to match Editorial theme */
+    input[type="text"], input[type="password"], input[type="email"] {
+        width: 100%;
+        padding: 16px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 14px;
+        color: #1e293b;
+        transition: all 0.3s ease;
+    }
+    input:focus {
+        outline: none;
+        border-color: #10b981;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+    }
+
+    .section-label {
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.25em;
+        color: #1e293b;
+        margin-bottom: 20px;
+        display: block;
+        border-bottom: 3px solid #10b981;
+        padding-bottom: 8px;
+        width: fit-content;
+    }
+
+    .auth-card {
+        background: #fcfdfc;
+        border-radius: 32px;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        min-height: 700px;
+        box-shadow: 0 40px 100px -20px rgba(2, 44, 34, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.1);
+    }
+
+    .branding-panel {
+        background: linear-gradient(135deg, #022c22 0%, #064e3b 100%);
+        padding: 60px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .branding-panel::after {
+        content: "ACCESS";
+        position: absolute; bottom: -20px; left: -10px;
+        font-family: 'Helvetica', Arial, sans-serif; font-size: 120px; font-weight: 900;
+        opacity: 0.03; color: white;
+    }
+
+    @media (max-width: 1024px) {
+        .auth-card { grid-template-columns: 1fr; }
+        .branding-panel { display: none; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="min-h-screen flex items-center justify-center py-20 px-4">
+    <div class="max-w-6xl w-full">
+        
+        <div class="auth-card">
+            
+            <!-- 1. LEFT: THE EDITORIAL BRANDING PANEL -->
+            <div class="branding-panel">
+                <div class="relative z-10">
+                    <img src="{% static 'images/RAISE-Logo.png' %}" class="w-16 h-16 mb-8 bg-white/10 p-2 rounded-2xl backdrop-blur-md">
+                    
+                    <span class="text-accent font-black text-[10px] uppercase tracking-[0.4em] block mb-4">Secure Gateway</span>
+                    <h1 class="text-4xl md:text-5xl font-helvetica font-bold leading-tight mb-8">
+                        AANR <br> Knowledge Hub
+                    </h1>
+                    
+                    <div class="space-y-8 mt-12">
+                        <div class="flex items-start gap-4">
+                            <span class="text-accent font-helvetica font-black text-xl">01.</span>
+                            <div>
+                                <h3 class="font-bold text-sm uppercase tracking-widest text-white/90">Access Resources</h3>
+                                <p class="text-white/50 text-xs mt-1">Explore research, publications, and technical documents.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <span class="text-accent font-helvetica font-black text-xl">02.</span>
+                            <div>
+                                <h3 class="font-bold text-sm uppercase tracking-widest text-white/90">Join the Community</h3>
+                                <p class="text-white/50 text-xs mt-1">Connect with farmers, researchers, and innovators.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <span class="text-accent font-helvetica font-black text-xl">03.</span>
+                            <div>
+                                <h3 class="font-bold text-sm uppercase tracking-widest text-white/90">Share Knowledge</h3>
+                                <p class="text-white/50 text-xs mt-1">Ask questions and contribute to discussions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. RIGHT: THE LOGIN WORKSPACE -->
+            <div class="p-8 md:p-16 flex flex-col justify-center bg-white">
+                
+                <header class="mb-10">
+                    <span class="section-label">Authentication</span>
+                    <h2 class="text-3xl font-helvetica font-bold text-navdark">Welcome Back</h2>
+                    <p class="text-slate-400 text-sm mt-2">Sign in to manage your research profile.</p>
+                </header>
+
+                {# Django Messages #}
+                {% if messages %}
+                <div class="mb-8 space-y-2">
+                    {% for message in messages %}
+                    <div class="px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-tight
+                        {% if message.tags == 'success' %} bg-emerald-50 text-emerald-700 border border-emerald-100
+                        {% else %} bg-red-50 text-red-700 border border-red-100 {% endif %}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <form method="post" class="space-y-6">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                    <div class="p-4 bg-red-50 border border-red-100 rounded-xl text-red-600 text-xs font-bold uppercase">
+                        {{ form.non_field_errors }}
+                    </div>
+                    {% endif %}
+                    
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Account Identity</label>
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <p class="mt-2 text-[10px] text-red-500 font-bold uppercase">{{ form.username.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between items-end mb-2">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Password</label>
+                            <a href="#" class="text-[10px] font-bold text-primary hover:text-secondary uppercase transition">Lost Access?</a>
+                        </div>
+                        {{ form.password }}
+                        {% if form.password.errors %}
+                            <p class="mt-2 text-[10px] text-red-500 font-bold uppercase">{{ form.password.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="flex items-center gap-3 py-2">
+                        <input id="remember-me" name="remember-me" type="checkbox" class="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary">
+                        <label for="remember-me" class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Remember Me</label>
+                    </div>
+                    
+                    <button type="submit" class="w-full py-4 bg-navdark text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-emerald-900 transition-all shadow-2xl shadow-emerald-900/20 active:scale-[0.98]">
+                        Authorize Access
+                    </button>
+                </form>
+                
+                <div class="mt-12 pt-8 border-t border-slate-100 text-center">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">
+                        Don't have an account?? 
+                        <a href="{% url 'signup' %}" class="text-primary hover:text-secondary ml-2 border-b-2 border-primary/20 hover:border-secondary transition">Apply for Membership</a>
+                    </p>
+                    
+                    <a href="/" class="mt-8 inline-flex items-center gap-2 text-[10px] font-black text-slate-300 hover:text-primary uppercase tracking-[0.2em] transition">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-width="3"/></svg>
+                        Return to Hub
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

@@ -7,6 +7,7 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
+from raisewesmin.views import signup_view
 from search import views as search_views
 
 urlpatterns = [
@@ -18,6 +19,7 @@ urlpatterns = [
     # Auth URLs
     path("login/", auth_views.LoginView.as_view(), name="login"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path("signup/", signup_view, name="signup"),
 ]
 
 
