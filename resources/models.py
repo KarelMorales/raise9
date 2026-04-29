@@ -40,7 +40,6 @@ class CommodityItem(Orderable):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-
     panels = [
         FieldPanel('name'),
         FieldPanel('category'),
@@ -55,10 +54,7 @@ class CommodityItem(Orderable):
 
 
 class ResourcesPage(Page):
-    page_subtitle = models.TextField(
-        blank=True,
-        default="Access curated knowledge resources for agriculture, aquatic and natural resources."
-    )
+    page_subtitle = models.TextField(blank=True, default="Access curated knowledge resources for agriculture, aquatic and natural resources.")
     page_description = models.TextField(blank=True, default="")
 
     content_panels = Page.content_panels + [
@@ -68,5 +64,61 @@ class ResourcesPage(Page):
         InlinePanel('commodities', label="Commodities"),
     ]
 
+    def get_context(self, request):
+        context = super().get_context(request)
+        # This allows the Resources page to list its sub-pages (the categories)
+        context['resource_categories'] = ResourceCategoryPage.objects.child_of(self).live()
+        return context
+
     class Meta:
         verbose_name = "Resources Page"
+
+
+class ResourceCategoryEntryItem(Orderable):
+    """These are the individual list items (Events, News, etc.) inside a Category Page"""
+    page = ParentalKey('ResourceCategoryPage', on_delete=models.CASCADE, related_name='entries')
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    url = models.URLField(blank=True, help_text="Link for the event or resource")
+    date = models.DateField(null=True, blank=True, help_text="Optional date for events or news")
+    
+    # Keeping the fields you had for flexibility
+    file_type = models.CharField(max_length=50, blank=True, help_text="e.g. PDF, Video, Link")
+    image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    panels = [
+        FieldPanel('title'),
+        FieldPanel('description'),
+        FieldPanel('url'),
+        FieldPanel('date'),
+        FieldPanel('file_type'),
+        FieldPanel('image'),
+    ]
+
+
+class ResourceCategoryPage(Page):
+    """The landing page for a specific category like 'Events' or 'Media'"""
+    category_icon = models.CharField(max_length=10, blank=True, default="📁")
+    description = models.TextField(blank=True)
+    color = models.CharField(
+        max_length=50,
+        blank=True,
+        default="from-primary to-accent",
+        help_text="Tailwind gradient e.g. from-primary to-accent"
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('category_icon'),
+        FieldPanel('description'),
+        FieldPanel('color'),
+        # This InlinePanel allows you to add the list of items
+        InlinePanel('entries', label="Resource Entries (List Items)"),
+    ]
+
+    class Meta:
+        verbose_name = "Resource Category Page"

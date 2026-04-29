@@ -132,6 +132,8 @@
                 background-size: 200% 200%;
                 animation: gradient 8s linear infinite;
             }
+            /* Fallback fix for giant icons if CSS fails */
+            img, svg { max-width: 100%; height: auto; }
             /* Custom Scrollbar to match theme */
             ::-webkit-scrollbar { width: 10px; }
             ::-webkit-scrollbar-track { background: #f0fdf4; }
@@ -149,19 +151,18 @@
 
         {# Navigation #}
         <nav class="bg-gradient-to-r from-navdark to-primary border-b border-accent/20 shadow-xl sticky top-0 z-50">
-            <div class="w-full">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-20">
-                    <div class="flex items-center pl-12">
+                    <div class="flex items-center">
                         <a href="/" class="flex items-center space-x-3 group">
                             <img src="{% static 'images/RAISE-Logo.png' %}" alt="AANR Knowledge Hub Logo" class="h-10 w-auto transform group-hover:scale-105 transition duration-300">
                             <div class="flex flex-col">
                                 <span class="text-lg font-helvetica font-bold text-white leading-tight tracking-wide">Raise Western Mindanao</span>
-                                <!-- <span class="text-xs text-accent font-poppins uppercase tracking-wider">km4aanr in WESTERN MINDANAO</span> -->
                             </div>
                         </a>
                     </div>
                     <div class="hidden lg:flex items-center">
-                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center space-x-1 xl:space-x-3 text-[13px]">
+                        <div class="flex items-center space-x-1 xl:space-x-3 text-[13px]">
                         <a href="/" class="text-gray-200 hover:text-secondary transition font-medium px-3 py-2 rounded-lg hover:bg-white/10">Home</a>
                         <a href="/about/" class="text-gray-200 hover:text-secondary transition font-medium px-3 py-2 rounded-lg hover:bg-white/10">About</a>
                         
@@ -236,7 +237,6 @@
                                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                                             DOST Forms
                                         </span>
-                                        
                                     </a>
                                 </div>
                             </div>
@@ -257,7 +257,6 @@
                             </button>
                             <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100 overflow-hidden">
                                 <div class="py-2">
-                                    
                                     <a href="/admin/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">Dashboard</a>
                                     <a href="{% url 'logout' %}" class="block px-4 py-2 text-red-600 hover:bg-red-50 transition border-t border-gray-100">Logout</a>
                                 </div>
@@ -353,7 +352,6 @@
 
         {# Footer (Fully Restored with SVGs) #}
         <footer class="bg-gradient-to-br from-navdark to-primary text-white mt-16 border-t-4 border-secondary relative overflow-hidden">
-            <!-- Subtle decorative background element -->
             <div class="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-3xl"></div>
             
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
@@ -374,13 +372,11 @@
                     <div>
                         <h4 class="font-bold mb-4 text-secondary uppercase tracking-widest text-sm">Connect With Us</h4>
                         <div class="flex space-x-4">
-                            <!-- Facebook Icon restored -->
                             <a href="#" class="text-gray-300 hover:text-accent transition transform hover:scale-110">
                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                                 </svg>
                             </a>
-                            <!-- Twitter Icon restored -->
                             <a href="#" class="text-gray-300 hover:text-accent transition transform hover:scale-110">
                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
