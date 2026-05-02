@@ -185,86 +185,57 @@
 
 {# 3. THE 4 FLAGSHIP PROJECTS #}
 <section id="projects" class="py-16 bg-white relative">
-    <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#064e3b 1px, transparent 1px); background-size: 30px 30px;"></div>
-    
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="text-center mb-12">
-            <div class="inline-block px-6 py-2 bg-surface text-primary rounded-full mb-4 border border-primary/20">
-                <span class="font-bold text-sm uppercase tracking-wider">Our Focus Areas</span>
-            </div>
-            <h2 class="text-4xl md:text-5xl font-helvetica font-bold text-navdark">Flagship Projects</h2>
+            <h2 class="text-4xl md:text-5xl font-helvetica font-bold text-navdark uppercase">Flagship Projects</h2>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {# Project 1 - JHCSC-IPTBM #}
-            <a href="{% if flagship_projects.jhcsc_iptbm %}{% pageurl flagship_projects.jhcsc_iptbm %}{% else %}#{% endif %}" class="group relative bg-white rounded-2xl overflow-hidden shadow-depth-lg hover:shadow-depth-2xl border border-depth-primary-100 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
-                <div class="absolute inset-0 bg-gradient-to-br from-depth-primary-50 to-depth-primary-100 rounded-2xl transform translate-y-1 translate-x-1 opacity-30 group-hover:translate-y-2 group-hover:translate-x-2 transition-all duration-500"></div>
-                <div class="relative z-10">
-                    <div class="h-40 bg-gradient-to-br from-primary to-navdark flex items-center justify-center relative overflow-hidden">
-                        <svg class="w-16 h-16 text-white/20 absolute transform group-hover:scale-150 transition-transform duration-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                        <span class="text-4xl relative z-10">💡</span>
-                    </div>
-                    <div class="p-6 flex-grow flex-col bg-gradient-to-br from-white via-depth-primary-50/30 to-white">
-                        <div class="relative z-10">
-                            <h3 class="font-bold text-lg text-depth-primary-900 mb-3">JHCSC-IPTBM</h3>
-                            <p class="text-depth-primary-700 text-sm mb-4 flex-grow">To implement Intellectual Property and Technology Business Management (IP-TBM) program of the institution in order to enhance their technology management capabilities.</p>
-                            <span class="text-depth-primary-600 font-bold text-sm group-hover:text-primary transition-colors flex items-center">View Details <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></span>
-                        </div>
-                    </div>
+            {# Project 1 - Regional IPTBM #}
+            <a href="{% if flagship_projects.regional_iptbm %}{% pageurl flagship_projects.regional_iptbm %}{% else %}#{% endif %}" class="group relative bg-white rounded-2xl overflow-hidden shadow-depth-lg hover:-translate-y-2 transition-all duration-300 flex flex-col h-full border border-gray-100">
+                <div class="h-40 bg-gradient-to-br from-primary to-navdark flex items-center justify-center">
+                    <span class="text-4xl">🌱</span>
+                </div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <h3 class="font-bold text-lg text-depth-primary-900 mb-3">RAISE- Regiona IPTBM</h3>
+                    <p class="text-slate-600 text-sm mb-4">Regional Intellectual Property and Technology Business Management.</p>
+                    <span class="mt-auto text-primary font-bold text-sm">View Dashboard &rarr;</span>
                 </div>
             </a>
 
-            {# Project 2 - RAISE - KM #}
-            <a href="{% if flagship_projects.raise_km %}{% pageurl flagship_projects.raise_km %}{% else %}#{% endif %}" class="group relative bg-white rounded-2xl overflow-hidden shadow-depth-lg hover:shadow-depth-2xl border border-depth-secondary-100 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
-                <div class="absolute inset-0 bg-gradient-to-br from-depth-secondary-50 to-depth-secondary-100 rounded-2xl transform translate-y-1 translate-x-1 opacity-30 group-hover:translate-y-2 group-hover:translate-x-2 transition-all duration-500"></div>
-                <div class="relative z-10">
-                    <div class="h-40 bg-gradient-to-br from-secondary to-yellow-600 flex items-center justify-center relative overflow-hidden">
-                        <svg class="w-16 h-16 text-white/20 absolute transform group-hover:scale-150 transition-transform duration-500" fill="currentColor" viewBox="0 0 24 24"><path d="M19 11H5m14 0 a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-                        <span class="text-4xl relative z-10">📊</span>
-                    </div>
-                    <div class="p-6 flex-grow flex-col bg-gradient-to-br from-white via-depth-secondary-50/30 to-white">
-                        <div class="relative z-10">
-                            <h3 class="font-bold text-lg text-depth-secondary-900 mb-3">RAISE - KM</h3>
-                            <p class="text-depth-secondary-700 text-sm mb-4 flex-grow">To enhance the knowledge management services of selected CMIs and facilitate the improvement of the Inventory of Knowledge Resources.</p>
-                            <span class="text-depth-secondary-600 font-bold text-sm group-hover:text-secondary transition-colors flex items-center">View Details <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></span>
-                        </div>
-                    </div>
+            {# Project 2 - ATBI #}
+            <a href="{% if flagship_projects.atbi %}{% pageurl flagship_projects.atbi %}{% else %}#{% endif %}" class="group relative bg-white rounded-2xl overflow-hidden shadow-depth-lg hover:-translate-y-2 transition-all duration-300 flex flex-col h-full border border-gray-100">
+                <div class="h-40 bg-gradient-to-br from-secondary to-yellow-600 flex items-center justify-center">
+                    <span class="text-4xl">💡</span>
+                </div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <h3 class="font-bold text-lg text-depth-primary-900 mb-3">Raise - ATBI</h3>
+                    <p class="text-slate-600 text-sm mb-4">Agri-Aqua Technology Business Incubation initiative.</p>
+                    <span class="mt-auto text-secondary font-bold text-sm">View Dashboard &rarr;</span>
                 </div>
             </a>
 
-            {# Project 3 - RAISE Regional IPTBM #}
-            <a href="{% if flagship_projects.regional_iptbm %}{% pageurl flagship_projects.regional_iptbm %}{% else %}#{% endif %}" class="group relative bg-white rounded-2xl overflow-hidden shadow-depth-lg hover:shadow-depth-2xl border border-depth-primary-200 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
-                <div class="absolute inset-0 bg-gradient-to-br from-depth-primary-100 to-depth-primary-200 rounded-2xl transform translate-y-1 translate-x-1 opacity-30 group-hover:translate-y-2 group-hover:translate-x-2 transition-all duration-500"></div>
-                <div class="relative z-10">
-                    <div class="h-40 bg-gradient-to-br from-accent to-primary flex items-center justify-center relative overflow-hidden">
-                        <svg class="w-16 h-16 text-white/20 absolute transform group-hover:scale-150 transition-transform duration-500" fill="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                        <span class="text-4xl relative z-10">🌱</span>
-                    </div>
-                    <div class="p-6 flex-grow flex-col bg-gradient-to-br from-white via-depth-primary-100/30 to-white">
-                        <div class="relative z-10">
-                            <h3 class="font-bold text-lg text-depth-primary-900 mb-3 leading-tight">RAISE Regional IPTBM</h3>
-                            <p class="text-depth-primary-700 text-sm mb-4 flex-grow">To establish the Regional IPTBM in Western Mindanao to intensify the technology commercialization activities of participating CMIs.</p>
-                            <span class="text-depth-primary-500 font-bold text-sm group-hover:text-accent transition-colors flex items-center">View Details <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></span>
-                        </div>
-                    </div>
+            {# Project 3 - ABH #}
+            <a href="{% if flagship_projects.abh %}{% pageurl flagship_projects.abh %}{% else %}#{% endif %}" class="group relative bg-white rounded-2xl overflow-hidden shadow-depth-lg hover:-translate-y-2 transition-all duration-300 flex flex-col h-full border border-gray-100">
+                <div class="h-40 bg-gradient-to-br from-accent to-primary flex items-center justify-center">
+                    <span class="text-4xl">🏗️</span>
+                </div>
+                <div class="p-6 flex-grow flex-col">
+                    <h3 class="font-bold text-lg text-depth-primary-900 mb-3">Raise - ABH</h3>
+                    <p class="text-slate-600 text-sm mb-4">Agri-Aqua Business Hub development and support.</p>
+                    <span class="mt-auto text-accent font-bold text-sm">View Dashboard &rarr;</span>
                 </div>
             </a>
 
-            {# Project 4 - ZSCMST-IPTBM #}
-            <a href="{% if flagship_projects.zscmst_iptbm %}{% pageurl flagship_projects.zscmst_iptbm %}{% else %}#{% endif %}" class="group relative bg-white rounded-2xl overflow-hidden shadow-depth-lg hover:shadow-depth-2xl border border-depth-neutral-200 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
-                <div class="absolute inset-0 bg-gradient-to-br from-depth-neutral-50 to-depth-neutral-100 rounded-2xl transform translate-y-1 translate-x-1 opacity-30 group-hover:translate-y-2 group-hover:translate-x-2 transition-all duration-500"></div>
-                <div class="relative z-10">
-                    <div class="h-40 bg-gradient-to-br from-navdark to-gray-800 flex items-center justify-center relative overflow-hidden">
-                        <svg class="w-16 h-16 text-white/20 absolute transform group-hover:scale-150 transition-transform duration-500" fill="currentColor" viewBox="0 0 24 24"><path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                        <span class="text-4xl relative z-10">🤝</span>
-                    </div>
-                    <div class="p-6 flex-grow flex-col bg-gradient-to-br from-white via-depth-neutral-50/30 to-white">
-                        <div class="relative z-10">
-                            <h3 class="font-bold text-lg text-depth-neutral-900 mb-3">ZSCMST-IPTBM</h3>
-                            <p class="text-depth-neutral-700 text-sm mb-4 flex-grow">To strengthen the capacities of Intellectual Property and Technology Business Management (IPTBM) operations of the Zamboanga State College of Marine Sciences and Technology.</p>
-                            <span class="text-depth-neutral-600 font-bold text-sm group-hover:text-primary transition-colors flex items-center">View Details <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></span>
-                        </div>
-                    </div>
+            {# Project 4 - KM #}
+            <a href="{% if flagship_projects.raise_km %}{% pageurl flagship_projects.raise_km %}{% else %}#{% endif %}" class="group relative bg-white rounded-2xl overflow-hidden shadow-depth-lg hover:-translate-y-2 transition-all duration-300 flex flex-col h-full border border-gray-100">
+                <div class="h-40 bg-gradient-to-br from-navdark to-gray-700 flex items-center justify-center">
+                    <span class="text-4xl">📊</span>
+                </div>
+                <div class="p-6 flex-grow flex-col">
+                    <h3 class="font-bold text-lg text-depth-primary-900 mb-3">RAISE - KM</h3>
+                    <p class="text-slate-600 text-sm mb-4">Knowledge Management and information resource inventory.</p>
+                    <span class="mt-auto text-navdark font-bold text-sm">View Dashboard &rarr;</span>
                 </div>
             </a>
         </div>

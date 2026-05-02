@@ -3,8 +3,8 @@ from wagtail.models import Page
 from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel
 
-# Import your EventPage model so HomePage can see it
-# If EventPage is in a different app, change 'events.models' to that app name
+# Import your related models
+from projects.models import ProjectPage
 from events.models import EventPage 
 
 class HomePage(Page):
@@ -55,15 +55,16 @@ class HomePage(Page):
         context = super().get_context(request)
         
         # 1. Fetch the 3 most recent LIVE event pages
-        # This will make the "Read Full Article" links work automatically
+        # This fixes the "Read Full Article" button on the homepage
         context['recent_events'] = EventPage.objects.live().public().order_by('-event_date')[:3]
 
-        # 2. Flagship Projects (Placeholder for now)
+        # 2. Flagship Projects - Links the cards to your project dashboards
+        # Using 'icontains' to prevent 404s caused by spacing/dash mismatches
         context['flagship_projects'] = {
-            'jhcsc_iptbm': None,
-            'raise_km': None,
-            'regional_iptbm': None,
-            'zscmst_iptbm': None,
+            'regional_iptbm': ProjectPage.objects.live().filter(abbreviation__icontains="Regional IPTBM").first(),
+            'atbi': ProjectPage.objects.live().filter(abbreviation__icontains="ATBI").first(),
+            'abh': ProjectPage.objects.live().filter(abbreviation__icontains="ABH").first(),
+            'raise_km': ProjectPage.objects.live().filter(abbreviation__icontains="KM").first(),
         }
         return context
 
