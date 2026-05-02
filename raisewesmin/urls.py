@@ -17,7 +17,8 @@ urlpatterns = [
     path("search/", search_views.search, name="search"),
 
     # Auth URLs
-    path("login/", auth_views.LoginView.as_view(), name="login"),
+    path("login/", auth_views.LoginView.as_view(template_name='registration/login.html'), name="login"),
+    # Adding next_page ensures that after the POST logout, it knows where to go
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path("signup/", signup_view, name="signup"),
 ]
@@ -25,12 +26,14 @@ urlpatterns = [
 
 if settings.DEBUG:
     from django.conf.urls.static import static
+    from django.contrib.auth import views as auth_views
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
     # Serve static and media files from development server
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+# Wagtail URLs should always be last
 urlpatterns = urlpatterns + [
     path("", include(wagtail_urls)),
 ]

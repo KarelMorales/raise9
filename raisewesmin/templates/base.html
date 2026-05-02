@@ -266,18 +266,22 @@
                                 {% endif %}
                                 <span>{{ user.first_name|default:user.username }}</span>
                             </button>
-                            <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100 overflow-hidden">
-                                <div class="py-2">
-                                    <a href="/admin/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">Dashboard</a>
-                                    <a href="{% url 'logout' %}" class="block px-4 py-2 text-red-600 hover:bg-red-50 transition border-t border-gray-100">Logout</a>
-                                </div>
-                            </div>
-                        </div>
-                        {% else %}
-                        <a href="{% url 'login' %}" class="px-6 py-2 bg-gradient-to-r from-secondary to-yellow-600 text-white rounded-full hover:shadow-lg hover:shadow-secondary/30 transition transform hover:-translate-y-0.5 font-medium">Login</a>
-                        {% endif %}
-                        </div>
-                    </div>
+                           <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100 overflow-hidden">
+    <div class="py-2">
+        <a href="/admin/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">Dashboard</a>
+        
+        {# Fixed Logout: Now uses a POST request #}
+        <form action="{% url 'logout' %}" method="post" class="block w-full">
+            {% csrf_token %}
+            <button type="submit" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition border-t border-gray-100 font-medium">
+                Logout
+            </button>
+        </form>
+    </div>
+</div>
+{% else %}
+<a href="{% url 'login' %}" class="px-6 py-2 bg-gradient-to-r from-secondary to-yellow-600 text-white rounded-full hover:shadow-lg hover:shadow-secondary/30 transition transform hover:-translate-y-0.5 font-medium">Login</a>
+{% endif %}
                     
                     {# Mobile Menu Button #}
                     <div class="lg:hidden flex items-center">
