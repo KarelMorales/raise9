@@ -3,9 +3,11 @@ from wagtail.models import Page
 from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel
 
+# Import your EventPage model so HomePage can see it
+# If EventPage is in a different app, change 'events.models' to that app name
+from events.models import EventPage 
 
 class HomePage(Page):
-
     # --- HERO SECTION ---
     hero_title = models.CharField(max_length=255, blank=True, default="Raise Western Mindanao")
     hero_subtitle = models.TextField(blank=True, default="Empowering agricultural communities through innovation, sustainability, and knowledge sharing.")
@@ -31,7 +33,6 @@ class HomePage(Page):
     stat3_description = models.CharField(max_length=200, default="Innovation and training initiatives")
 
     content_panels = Page.content_panels + [
-
         # Hero
         FieldPanel('hero_title'),
         FieldPanel('hero_subtitle'),
@@ -42,11 +43,9 @@ class HomePage(Page):
         FieldPanel('stat1_number'),
         FieldPanel('stat1_label'),
         FieldPanel('stat1_description'),
-
         FieldPanel('stat2_number'),
         FieldPanel('stat2_label'),
         FieldPanel('stat2_description'),
-
         FieldPanel('stat3_number'),
         FieldPanel('stat3_label'),
         FieldPanel('stat3_description'),
@@ -54,13 +53,18 @@ class HomePage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
+        
+        # 1. Fetch the 3 most recent LIVE event pages
+        # This will make the "Read Full Article" links work automatically
+        context['recent_events'] = EventPage.objects.live().public().order_by('-event_date')[:3]
+
+        # 2. Flagship Projects (Placeholder for now)
         context['flagship_projects'] = {
             'jhcsc_iptbm': None,
             'raise_km': None,
             'regional_iptbm': None,
             'zscmst_iptbm': None,
         }
-        context['recent_events'] = []
         return context
 
     class Meta:

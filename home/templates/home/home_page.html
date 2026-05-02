@@ -344,27 +344,29 @@
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             {% for event in recent_events %}
-            <div class="bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 hover:border-secondary/50 transition-all duration-300 hover:-translate-y-1">
-                <div class="p-6">
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 hover:border-secondary/50 transition-all duration-300 hover:-translate-y-1 flex flex-col h-full">
+                <div class="p-6 flex flex-col h-full">
                     {% if event.event_date %}
                     <span class="text-xs font-bold text-secondary mb-2 block">
                         {% if event.event_duration %}{{ event.event_duration }}{% else %}{{ event.event_date|date:"F d, Y" }}{% endif %}
                     </span>
                     {% endif %}
+                    
                     <h3 class="text-xl font-bold mb-3 text-white line-clamp-2">{{ event.title }}</h3>
-                    <p class="text-gray-300 text-sm mb-4 line-clamp-3">{{ event.intro|default:event.overview|default:"" }}</p>
-                    <a href="{% pageurl event %}" class="text-accent text-sm font-bold hover:text-white transition-colors">Read Full Article &rarr;</a>
+                    <p class="text-gray-300 text-sm mb-6 line-clamp-3">{{ event.intro|default:event.overview|default:"" }}</p>
+                    
+                    {# The fixed dynamic link #}
+                    <div class="mt-auto">
+                        <a href="{% pageurl event %}" class="text-accent text-sm font-bold hover:text-white transition-colors inline-flex items-center gap-2">
+                            Read Full Article 
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </a>
+                    </div>
                 </div>
             </div>
             {% empty %}
-            <!-- Placeholder events if none from CMS -->
-            <div class="bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 hover:border-secondary/50 transition-all duration-300 hover:-translate-y-1">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-secondary mb-2 block">Nov 18, 2025</span>
-                    <h3 class="text-xl font-bold mb-3 text-white">RAISE Hub Conducts Year 2 Annual Progress Review Meeting</h3>
-                    <p class="text-gray-300 text-sm mb-4 line-clamp-3">The review aimed to assess the overall progress of the program and ensure alignment of deliverables.</p>
-                    <a href="#" class="text-accent text-sm font-bold hover:text-white transition-colors">Read Full Article &rarr;</a>
-                </div>
+            <div class="col-span-full text-center py-10">
+                <p class="text-gray-400 italic">No events published yet. Please create and publish event pages in the Wagtail Admin.</p>
             </div>
             {% endfor %}
         </div>
