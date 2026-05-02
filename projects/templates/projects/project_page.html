@@ -3,6 +3,7 @@
 
 {% block extra_css %}
 <style>
+    /* Strict Helvetica System */
     body { 
         background-color: #f1f5f1; 
         color: #1e293b;
@@ -16,6 +17,7 @@
         height: calc(100vh - 80px);
     }
 
+    /* Left Sidebar Styling */
     .identity-rail {
         background: linear-gradient(135deg, #0f4f3f 0%, #022c22 70%, #065f46 100%);
         color: white;
@@ -25,7 +27,7 @@
         justify-content: space-between;
         position: relative;
         overflow: hidden;
-        z-index: 30;
+        z-index: 30; /* Keep sidebar above sliding content */
     }
 
     .identity-rail h1 {
@@ -35,6 +37,7 @@
         hyphens: auto;
     }
 
+    /* Tab Navigation */
     .tab-btn {
         padding: 16px 24px;
         font-weight: 700;
@@ -53,30 +56,33 @@
         border-bottom-color: #10b981;
     }
 
+    /* --- THE FILMSTRIP CAROUSEL --- */
+    
     .panels-viewport {
         position: relative;
         flex-grow: 1;
-        overflow: hidden;
+        overflow: hidden; /* This is the "window" we look through */
         background: white;
     }
 
     .panels-filmstrip {
-        display: flex;
+        display: flex; /* Lines panels up horizontally */
         height: 100%;
-        width: 500%;
-        transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+        width: 500%; /* 5 panels = 500% width */
+        transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1); /* Professional "Smooth-Slowing" curve */
         will-change: transform;
     }
 
     .tab-content { 
-        width: 20%;
+        width: 20%; /* Each panel takes up 1/5 of the 500% strip */
         height: 100%;
         padding: 3rem;
         overflow-y: auto; 
         background: white;
-        flex-shrink: 0;
+        flex-shrink: 0; /* Prevents panels from squishing */
     }
 
+    /* Custom Scrollbar */
     .custom-scroll::-webkit-scrollbar { width: 4px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
 
@@ -84,7 +90,7 @@
         body { overflow: auto; }
         .dashboard-container { grid-template-columns: 1fr; height: auto; }
         .panels-viewport { height: 600px; }
-        .panels-filmstrip { width: 500%; }
+        .panels-filmstrip { width: 400%; }
     }
 </style>
 {% endblock %}
@@ -103,6 +109,7 @@
             
             <div class="h-px w-20 bg-accent/30 mb-8"></div>
             
+            <!-- Key Project Metrics -->
             <div class="space-y-4 mb-12">
                 {% if page.duration_text %}
                 <div class="flex items-center gap-3">
@@ -154,26 +161,23 @@
 
         <!-- Viewport -->
         <div class="panels-viewport">
+            <!-- The Filmstrip containing all panels side-by-side -->
             <div class="panels-filmstrip" id="filmstrip">
                 
                 <!-- Tab: Overview -->
                 <div class="tab-content custom-scroll">
                     <h2 class="text-3xl font-bold text-navdark mb-8 uppercase">Project Overview</h2>
                     <div class="prose prose-lg max-w-none text-slate-600 leading-relaxed">
-                        {% if page.overview %}
-                            {{ page.overview|richtext }}
-                        {% else %}
-                            <p class="text-slate-400 italic">No overview added yet.</p>
-                        {% endif %}
+                        {{ page.overview|richtext|default:page.short_description }}
                     </div>
                     
                     {% if page.get_status_display or page.duration_text %}
                     <div class="mt-8 flex flex-wrap gap-4">
                         {% if page.get_status_display %}
-                        <span class="px-5 py-2 bg-primary/10 border border-primary/20 rounded-xl text-[10px] font-black uppercase tracking-tighter text-primary">{{ page.get_status_display }}</span>
+                        <span class="px-5 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-[10px] font-black uppercase tracking-tighter">{{ page.get_status_display }}</span>
                         {% endif %}
                         {% if page.duration_text %}
-                        <span class="px-5 py-2 bg-primary/10 border border-primary/20 rounded-xl text-[10px] font-black uppercase tracking-tighter text-primary">{{ page.duration_text }}</span>
+                        <span class="px-5 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-[10px] font-black uppercase tracking-tighter">{{ page.duration_text }}</span>
                         {% endif %}
                     </div>
                     {% endif %}
@@ -184,7 +188,7 @@
                     <h2 class="text-3xl font-bold text-navdark mb-8 uppercase">Strategic Mission</h2>
                     
                     {% if page.general_objective %}
-                    <div class="mb-10">
+                    <div class="mb-16">
                         <p class="text-[10px] font-black text-accent uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
                             <span class="w-8 h-px bg-accent"></span>
                             Core Objective
@@ -195,26 +199,43 @@
                     </div>
                     {% endif %}
 
-                    <h3 class="text-xs font-bold text-primary uppercase tracking-widest mb-6">Specific Objectives</h3>
-                    <div class="prose prose-lg max-w-none text-slate-600 leading-relaxed">
-                        {% if page.specific_objectives %}
-                            {{ page.specific_objectives|richtext }}
-                        {% else %}
-                            <p class="text-slate-400 italic">No specific objectives added yet.</p>
-                        {% endif %}
+                    <h3 class="text-xs font-bold text-primary uppercase tracking-widest mb-8">Specific Objectives</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        {% for obj in page.get_specific_objectives_list %}
+                        <div class="group">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="text-accent font-helvetica font-black text-2xl group-hover:scale-110 transition-transform">0{{ forloop.counter }}.</span>
+                                <div class="flex-grow h-px bg-slate-100"></div>
+                            </div>
+                            <p class="text-slate-500 text-sm leading-relaxed font-medium">{{ obj }}</p>
+                        </div>
+                        {% endfor %}
                     </div>
                 </div>
 
                 <!-- Tab: Team -->
                 <div class="tab-content custom-scroll">
                     <h2 class="text-3xl font-bold text-navdark mb-8 uppercase">Research Team</h2>
-                    <div class="prose prose-lg max-w-none text-slate-600 leading-relaxed">
-                        {% if page.team_members %}
-                            {{ page.team_members|richtext }}
-                        {% else %}
-                            <p class="text-slate-400 italic">No team members added yet.</p>
-                        {% endif %}
+                    
+                    <!-- Team Members -->
+                    {% if page.get_team_member_list %}
+                    <div>
+                        <h3 class="text-xs font-bold text-primary uppercase tracking-widest mb-6">Team Members</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {% for member in page.get_team_member_list %}
+                            <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow group">
+                                <div class="flex flex-col items-center text-center">
+                                    <div class="w-36 h-36 rounded-full overflow-hidden group-hover:scale-105 transition-transform border-2 border-emerald-200 mb-4">
+                                        <img src="{% static 'images/dummy_pic.jpg' %}" alt="{{ member.name }}" class="w-full h-full object-cover">
+                                    </div>
+                                    <h4 class="text-base font-bold text-slate-800">{{ member.name }}</h4>
+                                    <p class="text-xs font-medium text-emerald-600 uppercase tracking-wider mt-2">{{ member.role }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
+                    {% endif %}
                 </div>
 
                 <!-- Tab: Timeline -->
@@ -224,15 +245,18 @@
                     
                     {% if page.timeline_activities.all %}
                     <div class="space-y-8">
-                        {% for activity in page.timeline_activities.all %}
+                        {% for activity in page.timeline_activities.all|dictsortreversed:"date" %}
                         <div class="relative pl-8 border-l-2 border-accent/20 pb-8 last:pb-0">
                             <div class="absolute left-0 top-0 w-4 h-4 bg-accent rounded-full -translate-x-[9px] border-4 border-white shadow"></div>
+                            
                             <div class="mb-2">
                                 <span class="text-xs font-black text-primary uppercase tracking-widest">
                                     {% if activity.date %}{{ activity.date|date:"F Y" }}{% endif %}
                                 </span>
                             </div>
+                            
                             <h3 class="text-lg font-bold text-navdark mb-3 leading-tight">{{ activity.title }}</h3>
+                            
                             {% if activity.description %}
                             <div class="text-sm text-slate-600 leading-relaxed">
                                 {{ activity.description|linebreaks }}
@@ -250,6 +274,7 @@
                 <div class="tab-content custom-scroll">
                     <h2 class="text-3xl font-bold text-navdark mb-8 uppercase">Project Details</h2>
                     
+                    <!-- Categories -->
                     {% if page.get_category_list %}
                     <div class="mb-12">
                         <h3 class="text-xs font-bold text-primary uppercase tracking-widest mb-6">Field Focus</h3>
@@ -261,6 +286,7 @@
                     </div>
                     {% endif %}
                     
+                    <!-- Additional Details -->
                     <div class="prose prose-lg max-w-none text-slate-600 leading-relaxed">
                         {% if page.short_description %}
                         <div class="mb-8">
@@ -269,6 +295,7 @@
                         </div>
                         {% endif %}
                         
+                        <!-- Add any additional project-specific fields here -->
                         <div class="bg-gray-50 rounded-xl p-6 border border-gray-100">
                             <p class="text-sm text-slate-500">
                                 <strong>Project Status:</strong> {{ page.get_status_display|default:"Active" }}<br>
@@ -301,8 +328,13 @@
         tabs.forEach((tab) => {
             tab.addEventListener('click', () => {
                 const index = tab.getAttribute('data-index');
+                
+                // Update Tab Buttons
                 tabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
+
+                // Move the Filmstrip
+                // Index 0 = 0%, Index 1 = -20%, Index 2 = -40%, Index 3 = -60%, Index 4 = -80%
                 const movePercentage = index * 20; 
                 filmstrip.style.transform = `translateX(-${movePercentage}%)`;
             });

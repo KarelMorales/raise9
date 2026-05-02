@@ -18,6 +18,24 @@ class TimelineActivity(Orderable):
     ]
 
 
+class TeamMember(Orderable):
+    page = ParentalKey('ProjectPage', on_delete=models.CASCADE, related_name='team_members_list')
+    name = models.CharField(max_length=255)
+    role = models.CharField(max_length=255, blank=True)
+    photo = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    panels = [
+        FieldPanel('name'),
+        FieldPanel('role'),
+        FieldPanel('photo'),
+    ]
+
+
 class ProjectIndexPage(Page):
     intro = RichTextField(blank=True)
 
@@ -83,6 +101,7 @@ class ProjectPage(Page):
         FieldPanel('demo_url'),
         FieldPanel('source_url'),
         InlinePanel('timeline_activities', label="Timeline Activities"),
+        InlinePanel('team_members_list', label="Team Members"),
     ]
 
     def get_status_display(self):
@@ -111,13 +130,7 @@ class ProjectPage(Page):
         return []
 
     def get_team_member_list(self):
-        if self.team_members:
-            import re
-            from django.utils.html import strip_tags
-            text = strip_tags(self.team_members)
-            items = re.split(r'\n', text)
-            return [item.strip() for item in items if item.strip()]
-        return []
+        return self.team_members_list.all()
 
     @property
     def activities_count(self):

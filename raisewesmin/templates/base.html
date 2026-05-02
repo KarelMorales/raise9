@@ -166,6 +166,7 @@
                         <a href="/" class="text-gray-200 hover:text-secondary transition font-medium px-3 py-2 rounded-lg hover:bg-white/10">Home</a>
                         <a href="/about/" class="text-gray-200 hover:text-secondary transition font-medium px-3 py-2 rounded-lg hover:bg-white/10">About</a>
                         
+                            
                         {# Projects Dropdown #}
                         <div class="relative group">
                             <button class="flex items-center gap-1 text-gray-200 hover:text-secondary transition font-medium px-3 py-2 rounded-lg hover:bg-white/10">
@@ -174,15 +175,25 @@
                             </button>
                             <div class="absolute left-0 mt-2 w-64 bg-white rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100 overflow-hidden">
                                 <div class="py-2">
-                                    <a href="/projects/" class="block px-4 py-2 text-primary bg-surface font-semibold border-b border-gray-100">All Projects</a>
-                                    <a href="/projects/regional-iptbm/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">RAISE- Regional IPTBM</a>
-                                    <a href="/projects/jhcsc-iptbm/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">JHCSC-IPTBM</a>
-                                    <a href="/projects/zscmst-iptbm/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">ZSCMST-IPTBM</a>
+                                    <div id="iptbm-toggle-container">
+                                        <div class="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">
+                                            <a href="/projects/regional-iptbm/" class="flex-1">RAISE- Regional IPTBM</a>
+                                            <button onclick="toggleIptbmSubmenu()" class="p-1 hover:bg-gray-100 rounded ml-2" aria-label="Toggle submenu">
+                                                <svg id="iptbm-chevron" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                            </button>
+                                        </div>
+                                        <div id="iptbm-subitems" class="hidden pl-8 py-2 space-y-1">
+                                            <a href="/projects/wmsu/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">WMSU</a>
+                                            <a href="/projects/pr-ii/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">PR II</a>
+                                        </div>
+                                    </div>
+                                    <a href="/projects/raise-atbi/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">Raise - ATBI</a>
+                                    <a href="/projects/raise-abh/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">Raise - ABH</a>
                                     <a href="/projects/raise-km/" class="block px-4 py-2 text-gray-700 hover:bg-surface hover:text-primary transition">RAISE - KM</a>
                                 </div>
                             </div>
                         </div>
-                        
+
                         {# Events & Activities Dropdown #}
                         <div class="relative group">
                             <button class="text-gray-200 hover:text-secondary transition font-medium flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-white/10">
@@ -391,21 +402,37 @@
             </div>
         </footer>
 
-        {# Global javascript #}
-        <script type="text/javascript" src="{% static 'js/mycms.js' %}"></script>
-        <script>
-            // Mobile menu toggle
-            document.getElementById('mobile-menu-button').addEventListener('click', function() {
-                document.getElementById('mobile-menu').classList.toggle('hidden');
-            });
-            
-            // Mobile submenu toggle function
-            function toggleMobileSubmenu(menuId) {
-                const submenu = document.getElementById(menuId + '-mobile');
-                submenu.classList.toggle('hidden');
-            }
-        </script>
+       {# Global javascript #}
+<script type="text/javascript" src="{% static 'js/mycms.js' %}"></script>
 
-        {% block extra_js %}{% endblock %}
+<script>
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-button').addEventListener('click', function() {
+        document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // Mobile submenu toggle function
+    function toggleMobileSubmenu(menuId) {
+        const submenu = document.getElementById(menuId + '-mobile');
+        submenu.classList.toggle('hidden');
+    }
+
+    // IPTBM submenu toggle (FIXED - this was missing)
+    function toggleIptbmSubmenu() {
+        const submenu = document.getElementById('iptbm-subitems');
+        const chevron = document.getElementById('iptbm-chevron');
+
+        if (!submenu) return;
+
+        submenu.classList.toggle('hidden');
+
+        // optional arrow rotation for better UX
+        if (chevron) {
+            chevron.classList.toggle('rotate-90');
+        }
+    }
+</script>
+
+{% block extra_js %}{% endblock %}
     </body>
 </html>
