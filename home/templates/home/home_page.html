@@ -3,7 +3,69 @@
 
 {% block body_class %}template-homepage{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+    /* Custom style for the circular picture pins */
+    .custom-pin {
+        border: 3px solid #10b981;
+        border-radius: 50%;
+        background: white;
+        padding: 2px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+    .custom-pin:hover {
+        transform: scale(1.1);
+        border-color: #d97706;
+    }
+    .custom-pin img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    /* FIX: Ensures the map stays behind header and UI controls stay reachable */
+    #map {
+        z-index: 0 !important;
+    }
+    .leaflet-top, .leaflet-bottom {
+        z-index: 10 !important;
+    }
+
+    /* View Full Map Button Style */
+    .view-map-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 20;
+        background: white;
+        padding: 10px 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        font-weight: 600;
+        font-size: 12px;
+        color: #064e3b;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+    }
+    .view-map-btn:hover {
+        background: #f0fdf4;
+        color: #10b981;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
+
 
 {# 1. HERO CAROUSEL SECTION #}
 <section class="relative h-[90vh] w-full overflow-hidden">
@@ -157,7 +219,7 @@
                 <div class="absolute inset-0 bg-gradient-to-br from-depth-secondary-50 to-depth-secondary-100 rounded-2xl transform translate-y-1 translate-x-1 opacity-30 group-hover:translate-y-2 group-hover:translate-x-2 transition-all duration-500"></div>
                 <div class="relative z-10">
                     <div class="h-40 bg-gradient-to-br from-secondary to-yellow-600 flex items-center justify-center relative overflow-hidden">
-                        <svg class="w-16 h-16 text-white/20 absolute transform group-hover:scale-150 transition-transform duration-500" fill="currentColor" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        <svg class="w-16 h-16 text-white/20 absolute transform group-hover:scale-150 transition-transform duration-500" fill="currentColor" viewBox="0 0 24 24"><path d="M19 11H5m14 0 a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                         <span class="text-4xl relative z-10">📊</span>
                     </div>
                     <div class="p-6 flex-grow flex-col bg-gradient-to-br from-white via-depth-secondary-50/30 to-white">
@@ -295,27 +357,12 @@
                 </div>
             </div>
             {% empty %}
+            <!-- Placeholder events if none from CMS -->
             <div class="bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 hover:border-secondary/50 transition-all duration-300 hover:-translate-y-1">
                 <div class="p-6">
-                    <span class="text-xs font-bold text-secondary mb-2 block">November 18, 2025</span>
-                    <h3 class="text-xl font-bold mb-3 text-white">RAISE Caraga Conducts Year 2 Annual Progress Review Meeting to Consolidate Program Accomplishments.</h3>
-                    <p class="text-gray-300 text-sm mb-4 line-clamp-3">The review aimed to assess the overall progress of the RAISE Program from June to October 2025 and ensure alignment of remaining deliverables.</p>
-                    <a href="#" class="text-accent text-sm font-bold hover:text-white transition-colors">Read Full Article &rarr;</a>
-                </div>
-            </div>
-            <div class="bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 hover:border-secondary/50 transition-all duration-300 hover:-translate-y-1">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-secondary mb-2 block">November 27-28, 2025</span>
-                    <h3 class="text-xl font-bold mb-3 text-white">RAISE Caraga Conducts Phase II Proposal Writing Workshop.</h3>
-                    <p class="text-gray-300 text-sm mb-4">The two-day training aimed to enhance the region's capacity to develop high-quality, fundable project proposals aligned with DOST-PCAARRD's priorities and the program's 6Ps framework.</p>
-                    <a href="#" class="text-accent text-sm font-bold hover:text-white transition-colors">Read Full Article &rarr;</a>
-                </div>
-            </div>
-            <div class="bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 hover:border-secondary/50 transition-all duration-300 hover:-translate-y-1">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-secondary mb-2 block">December 11-13, 2025</span>
-                    <h3 class="text-xl font-bold mb-3 text-white">RAISE Caraga Conducts Year-End Activity on Ways Forward and Phase II Planning</h3>
-                    <p class="text-gray-300 text-sm mb-4">The three-day activity, held in Claveria, Misamis Oriental, was organized by RAISE Caraga and attended by the RAISE Core Staff.</p>
+                    <span class="text-xs font-bold text-secondary mb-2 block">Nov 18, 2025</span>
+                    <h3 class="text-xl font-bold mb-3 text-white">RAISE Hub Conducts Year 2 Annual Progress Review Meeting</h3>
+                    <p class="text-gray-300 text-sm mb-4 line-clamp-3">The review aimed to assess the overall progress of the program and ensure alignment of deliverables.</p>
                     <a href="#" class="text-accent text-sm font-bold hover:text-white transition-colors">Read Full Article &rarr;</a>
                 </div>
             </div>
@@ -324,24 +371,23 @@
     </div>
 </section>
 
-{# 6. GOOGLE MAPS SECTION #}
+{# 6. INTERACTIVE REGIONAL MAP SECTION #}
 <section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl font-helvetica font-bold text-navdark">Locate Us</h2>
-            <p class="text-gray-600 mt-2">Visit our main hub in Western Mindanao</p>
+            <p class="text-gray-600 mt-2">Visit our main hub and partner institutions in Western Mindanao</p>
         </div>
         
-        <div class="w-full h-[350px] md:h-[450px] rounded-2xl overflow-hidden shadow-lg border-2 border-primary/10">
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1011155.6738986877!2d121.78280361099182!3d7.882046467323871!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32512f483c6dd103%3A0x633d4dae0da1f6f8!2sZamboanga%20Peninsula!5e0!3m2!1sen!2sph!4v1711812345678!5m2!1sen!2sph" 
-                width="100%" 
-                height="100%" 
-                style="border:0;" 
-                allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
+        <div class="relative w-full h-[350px] md:h-[450px] rounded-2xl shadow-lg border-2 border-primary/10 overflow-hidden">
+            <!-- View Full Map Button -->
+            <a href="https://www.google.com/maps/search/Zamboanga+Peninsula+Universities/@7.882,122.782,9z" target="_blank" class="view-map-btn">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                View Full Map
+            </a>
+
+            <!-- Leaflet Map Container -->
+            <div id="map" class="w-full h-full"></div>
         </div>
     </div>
 </section>
@@ -350,78 +396,124 @@
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         
-        // 1. Initialize Swiper
+        // 1. Initialize Map
+        var map = L.map('map').setView([7.8, 122.8], 8);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        const locations = [
+            {
+                name: "WMSU (Main Hub)",
+                coords: [6.9186, 122.0620],
+                address: "Normal Road, Baliwasan, Zamboanga City",
+                img: "{% static 'images/WMSU-pin.jpg' %}",
+                mapUrl: "https://www.google.com/maps/dir/?api=1&destination=Normal+Road+Baliwasan+Zamboanga+City"
+            },
+            {
+                name: "JRMSU",
+                coords: [8.6575, 123.4211],
+                address: "Governor Guading Adaza Street Santa Cruz, Dapitan City",
+                img: "{% static 'images/JRMSU-pin.jpg' %}",
+                mapUrl: "https://www.google.com/maps/dir/?api=1&destination=JRMSU+Dapitan+City"
+            },
+            {
+                name: "JHCSC",
+                coords: [7.6322, 123.3101],
+                address: "Dumalinao margosatubig road mati, San Miguel",
+                img: "{% static 'images/JHCSC-pin.jpg' %}",
+                mapUrl: "https://www.google.com/maps/dir/?api=1&destination=JHCSC+San+Miguel+Zamboanga+del+Sur"
+            },
+            {
+                name: "ZSCMST",
+                coords: [6.9056, 122.0833],
+                address: "Zamboanga City, Zamboanga del Sur",
+                img: "{% static 'images/ZSCMST-pin.jpg' %}",
+                mapUrl: "https://www.google.com/maps/dir/?api=1&destination=ZSCMST+Zamboanga+City"
+            },
+            {
+                name: "PRRI",
+                coords: [7.7797, 122.5858],
+                address: "DA-Research Complex, Sanito, Ipil, Zamboanga Sibugay",
+                img: "{% static 'images/PRRI-pin.jpg' %}",
+                mapUrl: "https://www.google.com/maps/dir/?api=1&destination=DA-Research+Complex+Ipil+Sibugay"
+            }
+        ];
+
+        locations.forEach(loc => {
+            var icon = L.divIcon({
+                className: 'custom-pin',
+                html: `<img src="${loc.img}" onerror="this.src='{% static 'images/RAISE-Logo.png' %}'">`,
+                iconSize: [45, 45],
+                iconAnchor: [22, 22]
+            });
+
+            var marker = L.marker(loc.coords, { icon: icon }).addTo(map);
+            
+            // Add Popup
+            marker.bindPopup(`
+                <div style="font-family: 'Poppins', sans-serif; text-align: center;">
+                    <b style="color: #064e3b;">${loc.name}</b><br>
+                    <span style="font-size: 11px;">${loc.address}</span><br>
+                    <a href="${loc.mapUrl}" target="_blank" style="display: inline-block; margin-top: 8px; padding: 5px 10px; background: #10b981; color: white; border-radius: 5px; text-decoration: none; font-size: 10px; font-weight: bold;">
+                        Open in Google Maps
+                    </a>
+                </div>
+            `);
+
+            // Redirect to Full Google Map on click
+            marker.on('click', function() {
+                window.open(loc.mapUrl, '_blank');
+            });
+        });
+
+        // 2. Initialize Swiper
         try {
             if (typeof Swiper !== 'undefined') {
-                const swiper = new Swiper(".heroSwiper", {
+                new Swiper(".heroSwiper", {
                     loop: true,
                     effect: "fade",
                     speed: 1000,
-                    autoplay: {
-                        delay: 6000,
-                        disableOnInteraction: false,
-                    },
-                    pagination: {
-                        el: ".swiper-pagination",
-                        clickable: true,
-                    },
-                    navigation: {
-                        nextEl: ".swiper-button-next",
-                        prevEl: ".swiper-button-prev",
-                    },
+                    autoplay: { delay: 6000, disableOnInteraction: false },
+                    pagination: { el: ".swiper-pagination", clickable: true },
+                    navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
                 });
             }
-        } catch (error) {
-            console.log('Swiper initialization failed:', error);
-        }
+        } catch (error) { console.log('Swiper failed:', error); }
 
-        // 2. Animated Counter Logic
+        // 3. Counter Animation
         const counters = document.querySelectorAll('.counter');
-        
         function animateCounter(el) {
             const target = parseInt(el.getAttribute('data-target'));
             const duration = 2000;
             const increment = target / (duration / 16);
             let current = 0;
-
             function updateCounter() {
                 current += increment;
                 if (current < target) {
                     el.textContent = Math.floor(current);
                     requestAnimationFrame(updateCounter);
-                } else {
-                    el.textContent = target;
-                }
+                } else { el.textContent = target; }
             }
             updateCounter();
         }
 
-        // 3. Intersection Observer
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const el = entry.target;
-                    if (!el.classList.contains('counted')) {
-                        el.classList.add('counted');
-                        animateCounter(el);
-                    }
+                if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
+                    entry.target.classList.add('counted');
+                    animateCounter(entry.target);
                 }
             });
         }, { threshold: 0.1 });
 
-        counters.forEach(counter => {
-            observer.observe(counter);
-            const rect = counter.getBoundingClientRect();
-            const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-            if (isVisible && !counter.classList.contains('counted')) {
-                counter.classList.add('counted');
-                setTimeout(() => animateCounter(counter), 100);
-            }
-        });
+        counters.forEach(counter => observer.observe(counter));
     });
 </script>
 {% endblock %}
