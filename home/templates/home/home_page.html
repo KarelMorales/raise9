@@ -6,14 +6,9 @@
 {% block extra_css %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
-    /* Custom style for the circular picture pins */
+    /* Custom style for the pins - updated for emoji rendering consistency */
     .custom-pin {
-        border: 3px solid #10b981;
-        border-radius: 50%;
-        background: white;
-        padding: 2px;
-        overflow: hidden;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        font-size: 28px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -22,13 +17,6 @@
     }
     .custom-pin:hover {
         transform: scale(1.1);
-        border-color: #d97706;
-    }
-    .custom-pin img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        object-fit: cover;
     }
 
     /* FIX: Ensures the map stays behind header and UI controls stay reachable */
@@ -176,7 +164,7 @@
                 <div class="relative z-10">
                     <div class="text-5xl font-bold text-depth-primary-500 mb-2 font-helvetica"><span class="counter" data-target="{{ page.stat3_number }}">0</span>+</div>
                     <div class="text-lg font-bold text-depth-primary-900">{{ page.stat3_label }}</div>
-                    <div class="text-sm text-depth-primary-700">{{ page.stat3_description }}</div>
+              700">{{ page.stat3_description }}</div>
                 </div>
             </div>
         </div>
@@ -326,63 +314,62 @@
                 name: "WMSU (Main Hub)",
                 coords: [6.9186, 122.0620],
                 address: "Normal Road, Baliwasan, Zamboanga City",
-                img: "{% static 'images/WMSU-pin.jpg' %}",
                 mapUrl: "https://www.google.com/maps/dir/?api=1&destination=Normal+Road+Baliwasan+Zamboanga+City"
             },
             {
                 name: "JRMSU",
                 coords: [8.6575, 123.4211],
                 address: "Governor Guading Adaza Street Santa Cruz, Dapitan City",
-                img: "{% static 'images/JRMSU-pin.jpg' %}",
                 mapUrl: "https://www.google.com/maps/dir/?api=1&destination=JRMSU+Dapitan+City"
             },
             {
                 name: "JHCSC",
                 coords: [7.6322, 123.3101],
                 address: "Dumalinao margosatubig road mati, San Miguel",
-                img: "{% static 'images/JHCSC-pin.jpg' %}",
                 mapUrl: "https://www.google.com/maps/dir/?api=1&destination=JHCSC+San+Miguel+Zamboanga+del+Sur"
             },
             {
                 name: "ZSCMST",
                 coords: [6.9056, 122.0833],
                 address: "Zamboanga City, Zamboanga del Sur",
-                img: "{% static 'images/ZSCMST-pin.jpg' %}",
                 mapUrl: "https://www.google.com/maps/dir/?api=1&destination=ZSCMST+Zamboanga+City"
             },
             {
                 name: "PRRI",
                 coords: [7.7797, 122.5858],
                 address: "DA-Research Complex, Sanito, Ipil, Zamboanga Sibugay",
-                img: "{% static 'images/PRRI-pin.jpg' %}",
                 mapUrl: "https://www.google.com/maps/dir/?api=1&destination=DA-Research+Complex+Ipil+Sibugay"
             }
         ];
 
         locations.forEach(loc => {
+            // Modified to construct an icon template using the pin emoji verbatim
             var icon = L.divIcon({
                 className: 'custom-pin',
-                html: `<img src="${loc.img}" onerror="this.src='{% static 'images/RAISE-Logo.png' %}'">`,
-                iconSize: [45, 45],
-                iconAnchor: [22, 22]
+                html: '📍',
+                iconSize: [30, 30],
+                iconAnchor: [15, 30]
             });
 
             var marker = L.marker(loc.coords, { icon: icon }).addTo(map);
             
-            // Add Popup
+            // Appended formatted text elements highlighting coordinates explicitly
             marker.bindPopup(`
-                <div style="font-family: 'Poppins', sans-serif; text-align: center;">
-                    <b style="color: #064e3b;">${loc.name}</b><br>
-                    <span style="font-size: 11px;">${loc.address}</span><br>
-                    <a href="${loc.mapUrl}" target="_blank" style="display: inline-block; margin-top: 8px; padding: 5px 10px; background: #10b981; color: white; border-radius: 5px; text-decoration: none; font-size: 10px; font-weight: bold;">
+                <div style="font-family: 'Poppins', sans-serif; text-align: center; min-width: 150px;">
+                    <b style="color: #064e3b; font-size: 13px;">${loc.name}</b><br>
+                    <span style="font-size: 11px; color: #64748b; display: block; margin-top: 2px;">${loc.address}</span>
+                    <div style="background: #f1f5f9; padding: 4px; border-radius: 6px; font-size: 10px; color: #475569; margin: 6px 0; font-family: monospace;">
+                        Lat: ${loc.coords[0].toFixed(4)}<br>Lng: ${loc.coords[1].toFixed(4)}
+                    </div>
+                    <a href="${loc.mapUrl}" target="_blank" style="display: inline-block; margin-top: 4px; padding: 5px 10px; background: #10b981; color: white; border-radius: 5px; text-decoration: none; font-size: 10px; font-weight: bold;">
                         Open in Google Maps
                     </a>
                 </div>
             `);
 
-            // Redirect to Full Google Map on click
+            // Displays information balloon smoothly instead of executing hard page re-routing overrides
             marker.on('click', function() {
-                window.open(loc.mapUrl, '_blank');
+                this.openPopup();
             });
         });
 
