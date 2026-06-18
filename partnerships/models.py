@@ -33,6 +33,13 @@ class CollaboratingAgency(Orderable):
     description = models.TextField(blank=True)
     icon = models.CharField(max_length=10, blank=True, default="🏢")
     website = models.URLField(blank=True)
+    # Added the image database link for uploading custom logos/photos
+    image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
 
     panels = [
         FieldPanel('name'),
@@ -40,6 +47,7 @@ class CollaboratingAgency(Orderable):
         FieldPanel('description'),
         FieldPanel('icon'),
         FieldPanel('website'),
+        FieldPanel('image'), # Displays the image chooser upload input block in the admin area
     ]
 
 
