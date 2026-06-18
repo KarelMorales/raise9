@@ -1,11 +1,34 @@
 from django.db import models
-from wagtail.models import Page
+from wagtail.models import Page, Orderable  # Added Orderable here
 from wagtail.fields import RichTextField
-from wagtail.admin.panels import FieldPanel
+from wagtail.admin.panels import FieldPanel, InlinePanel  # Added InlinePanel here
+from modelcluster.fields import ParentalKey  # Added ParentalKey for model linking
 
 # Import your related models
 from projects.models import ProjectPage
 from events.models import EventPage 
+
+
+class MapLocation(Orderable):
+    page = ParentalKey('HomePage', on_delete=models.CASCADE, related_name='map_locations')
+    name = models.CharField(max_length=255, help_text="e.g., WMSU (Main Hub)")
+    latitude = models.FloatField(help_text="e.g., 6.9186")
+    longitude = models.FloatField(help_text="e.g., 122.0620")
+    address = models.CharField(max_length=255, blank=True)
+    google_maps_url = models.URLField(blank=True, verbose_name="Google Maps Link")
+    pop_offset_x = models.IntegerField(default=0, help_text="Use -30 or 30 to shift popup if pins overlap close together.")
+    pop_offset_y = models.IntegerField(default=-24, help_text="Default is -24 (places popup right over pin tip).")
+
+    panels = [
+        FieldPanel('name'),
+        FieldPanel('latitude'),
+        FieldPanel('longitude'),
+        FieldPanel('address'),
+        FieldPanel('google_maps_url'),
+        FieldPanel('pop_offset_x'),
+        FieldPanel('pop_offset_y'),
+    ]
+
 
 class HomePage(Page):
     # --- HERO SECTION ---
@@ -49,17 +72,18 @@ class HomePage(Page):
         FieldPanel('stat3_number'),
         FieldPanel('stat3_label'),
         FieldPanel('stat3_description'),
+
+        # Map Locations admin management portal row
+        InlinePanel('map_locations', label="Map Locations"),
     ]
 
     def get_context(self, request):
         context = super().get_context(request)
         
         # 1. Fetch the 3 most recent LIVE event pages
-        # This fixes the "Read Full Article" button on the homepage
         context['recent_events'] = EventPage.objects.live().public().order_by('-event_date')[:3]
 
         # 2. Flagship Projects - Links the cards to your project dashboards
-        # Using 'icontains' to prevent 404s caused by spacing/dash mismatches
         context['flagship_projects'] = {
             'regional_iptbm': ProjectPage.objects.live().filter(abbreviation__icontains="Regional IPTBM").first(),
             'atbi': ProjectPage.objects.live().filter(abbreviation__icontains="ATBI").first(),
